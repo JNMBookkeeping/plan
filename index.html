@@ -1,0 +1,1187 @@
+<title>Personal CFO Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky tab bar over a single-column working surface; summary cards first, detail tables below. */
+:root {
+  --bg: #f3f5f7; --panel: #ffffff; --panel2: #eef2f5; --ink: #14202b; --muted: #52606d; --dim: #7b8794;
+  --line: #d8dfe5; --accent: #0f6b62; --accent-ink: #ffffff; --accent-soft: #dcefec;
+  --pos: #1a7f4b; --warn: #a15c07; --neg: #b42318;
+  --pos-soft: #dff3e8; --warn-soft: #fbefd5; --neg-soft: #fbe3e0;
+  --c1: #0f6b62; --c2: #c27a12; --c3: #3d5a80; --c4: #8a4f7d;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1418; --panel: #141d23; --panel2: #1a262d; --ink: #e5edf1; --muted: #9db0ba; --dim: #71858f;
+    --line: #26353e; --accent: #3fbfae; --accent-ink: #06201c; --accent-soft: #123631;
+    --pos: #4cc38a; --warn: #e0a43a; --neg: #f0766b;
+    --pos-soft: #12301f; --warn-soft: #382b10; --neg-soft: #3a1a17;
+    --c1: #3fbfae; --c2: #e0a43a; --c3: #7fa6d6; --c4: #c78bbb; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1418; --panel: #141d23; --panel2: #1a262d; --ink: #e5edf1; --muted: #9db0ba; --dim: #71858f;
+  --line: #26353e; --accent: #3fbfae; --accent-ink: #06201c; --accent-soft: #123631;
+  --pos: #4cc38a; --warn: #e0a43a; --neg: #f0766b;
+  --pos-soft: #12301f; --warn-soft: #382b10; --neg-soft: #3a1a17;
+  --c1: #3fbfae; --c2: #e0a43a; --c3: #7fa6d6; --c4: #c78bbb; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.45;
+  padding-inline: 16px; padding-block: 0 48px; }
+.wrap { max-width: 1180px; margin: 0 auto; }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg);
+  border-bottom: 1px solid var(--line); margin-inline: -16px; padding: 10px 16px 0; }
+.brandrow { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; max-width: 1180px; margin: 0 auto; }
+.brand { font-weight: 600; font-size: 17px; letter-spacing: .1px; }
+.asof { color: var(--dim); font-size: 12px; font-family: var(--mono); }
+nav.tabs { display: flex; gap: 2px; overflow-x: auto; max-width: 1180px; margin: 6px auto 0; scrollbar-width: thin; }
+nav.tabs button { background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted);
+  padding: 8px 12px; font: inherit; cursor: pointer; white-space: nowrap; }
+nav.tabs button:hover { color: var(--ink); }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; }
+main { padding-top: 18px; display: flex; flex-direction: column; gap: 22px; }
+h1 { font-size: 20px; margin: 0; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 15px; margin: 0 0 4px; font-weight: 600; }
+h3 { font-size: 13px; margin: 0; font-weight: 600; }
+.sub { color: var(--muted); margin: 0 0 10px; max-width: 72ch; font-size: 13px; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+.cols { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.cols > * { min-width: 0; }
+.cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; min-width: 0; }
+.card .l { color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; }
+.card .v { font-family: var(--mono); font-size: 21px; font-weight: 500; margin-top: 4px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.card .f { color: var(--dim); font-size: 12px; margin-top: 3px; }
+.card.key { border-color: var(--accent); }
+.pos { color: var(--pos); } .neg { color: var(--neg); } .warn { color: var(--warn); }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; vertical-align: middle; }
+th { color: var(--muted); font-weight: 500; font-size: 12px; background: var(--panel2); position: sticky; top: 0; }
+td.n, th.n { text-align: right; font-family: var(--mono); font-size: 13px; }
+tr.tot td { font-weight: 600; background: var(--panel2); }
+tr.hl td { background: var(--accent-soft); }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .03em; }
+.pill.GREEN { background: var(--pos-soft); color: var(--pos); }
+.pill.YELLOW { background: var(--warn-soft); color: var(--warn); }
+.pill.RED { background: var(--neg-soft); color: var(--neg); }
+.badge { font-size: 11px; padding: 1px 7px; border-radius: 4px; background: var(--panel2); color: var(--muted); border: 1px solid var(--line); }
+.badge.fc { color: var(--c3); } .badge.ac { color: var(--pos); } .badge.pl { color: var(--warn); }
+.alerts { display: flex; flex-direction: column; gap: 6px; }
+.alert { display: flex; gap: 10px; padding: 8px 12px; border-radius: 6px; background: var(--panel2); border-left: 3px solid var(--warn); }
+.alert.bad { border-left-color: var(--neg); background: var(--neg-soft); }
+.alert.ok { border-left-color: var(--pos); background: var(--pos-soft); }
+.banner { background: var(--accent-soft); border: 1px solid var(--accent); border-radius: 8px; padding: 10px 14px; }
+button.btn, a.btn { font: inherit; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 6px;
+  padding: 6px 12px; cursor: pointer; }
+button.btn:hover { border-color: var(--accent); }
+button.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.btn.danger { color: var(--neg); }
+button.mini { font: inherit; background: none; border: 0; color: var(--muted); cursor: pointer; padding: 2px 6px; }
+button.mini:hover { color: var(--neg); }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.seg button { font: inherit; background: var(--panel); color: var(--muted); border: 0; padding: 5px 12px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 5px; padding: 5px 8px; max-width: 100%; }
+input[type="number"], input[type="text"], input[type="date"], select { min-width: 0; }
+td input, td select { width: 100%; min-width: 86px; }
+td input[type="checkbox"] { width: auto; min-width: 0; }
+.fgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.fgrid label { display: flex; flex-direction: column; gap: 3px; color: var(--muted); font-size: 12px; min-width: 0; }
+.fgrid label input, .fgrid label select { width: 100%; }
+.fgrid label .hint { color: var(--dim); font-size: 11.5px; }
+textarea { width: 100%; min-height: 120px; font-family: var(--mono); font-size: 12px; }
+svg.chart { width: 100%; height: auto; display: block; }
+svg.chart text { fill: var(--muted); font-size: 11px; font-family: var(--mono); }
+svg.chart .grid { stroke: var(--line); stroke-width: 1; }
+svg.chart .ref { stroke: var(--neg); stroke-width: 1; stroke-dasharray: 4 3; }
+.s1 { stroke: var(--c1); fill: var(--c1); } .s2 { stroke: var(--c2); fill: var(--c2); }
+.s3 { stroke: var(--c3); fill: var(--c3); } .s4 { stroke: var(--c4); fill: var(--c4); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 4px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.bar { height: 8px; border-radius: 4px; background: var(--accent); min-width: 2px; }
+.track { height: 8px; border-radius: 4px; background: var(--panel2); overflow: hidden; }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); min-width: 640px; }
+.cal .h { background: var(--panel2); padding: 4px 6px; font-size: 11px; color: var(--muted); }
+.cal .d { background: var(--panel); min-height: 92px; padding: 4px 5px; font-size: 11px; min-width: 0; }
+.cal .d.off { background: var(--bg); color: var(--dim); }
+.cal .d .dn { color: var(--dim); font-family: var(--mono); }
+.cal .d .bal { color: var(--muted); font-family: var(--mono); margin-top: 3px; }
+.cal .ev { display: block; width: 100%; text-align: left; border: 0; background: none; font: inherit; font-size: 11px; padding: 1px 0; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink); }
+.cal .ev:hover { text-decoration: underline; }
+.flash { animation: flash 1.6s ease-out; }
+@keyframes flash { from { background: var(--accent-soft); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .flash { animation: none; background: var(--accent-soft); } }
+.steps { display: flex; gap: 6px; flex-wrap: wrap; }
+.steps span { font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--dim); }
+.steps span.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.steps span.done { color: var(--pos); border-color: var(--pos); }
+.muted { color: var(--muted); } .dim { color: var(--dim); }
+.mono { font-family: var(--mono); }
+.tip { border-bottom: 1px dotted var(--dim); cursor: help; }
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="brandrow"><span class="brand">Personal CFO Plan</span><span class="asof" id="asof"></span>
+    <span style="flex:1"></span><button class="btn" id="themeBtn" type="button">Theme</button></div>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+</header>
+<main id="view"></main>
+</div>
+
+<script id="engine">
+/* ===================== ENGINE (pure; mirrors engine/planning in the Python repo) ===================== */
+const Engine = (() => {
+  const MS = 86400000;
+  const pd = (s) => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+  const iso = (t) => new Date(t).toISOString().slice(0, 10);
+  const addDays = (s, n) => iso(pd(s) + n * MS);
+  const diffDays = (a, b) => Math.round((pd(a) - pd(b)) / MS);
+  const dim = (y, m) => new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const addMonths = (s, n, day) => {
+    const [y, m, d] = s.split('-').map(Number);
+    const idx = y * 12 + (m - 1) + n, yy = Math.floor(idx / 12), mm = (idx % 12) + 1;
+    const want = day == null ? d : day;
+    return `${yy}-${String(mm).padStart(2, '0')}-${String(Math.min(want, dim(yy, mm))).padStart(2, '0')}`;
+  };
+  const cents = (x) => Math.round((x + Number.EPSILON) * 100) / 100;
+  const PER_YEAR = { weekly: 52, biweekly: 26, semimonthly: 24, monthly: 12, quarterly: 4, annual: 1 };
+  const PAY = ['weekly', 'biweekly', 'semimonthly', 'monthly'];
+
+  function occurrences(cad, anchor, start, end, second = 15) {
+    const out = [];
+    if (!anchor) return out;
+    if (cad === 'once') return anchor >= start && anchor <= end ? [anchor] : [];
+    if (cad === 'weekly' || cad === 'biweekly') {
+      const step = cad === 'weekly' ? 7 : 14;
+      let d = anchor;
+      if (d < start) d = addDays(d, Math.ceil(diffDays(start, d) / step) * step);
+      while (d <= end) { out.push(d); d = addDays(d, step); }
+      return out;
+    }
+    if (cad === 'semimonthly') {
+      const ad = Number(anchor.slice(8, 10));
+      const [f, s2] = [Math.min(ad, second), Math.max(ad, second)];
+      const ms = anchor.slice(0, 7) + '-01';
+      for (let m = 0; m < 1200; m++) {
+        for (const day of [f, s2]) {
+          const d = addMonths(ms, m, day);
+          if (d > end) return out;
+          if (d >= start && d >= anchor) out.push(d);
+        }
+      }
+      return out;
+    }
+    const step = { monthly: 1, quarterly: 3, annual: 12 }[cad] || 1;
+    for (let n = 0; n < 2400; n++) {
+      const d = addMonths(anchor, n * step);
+      if (d > end) return out;
+      if (d >= start) out.push(d);
+    }
+    return out;
+  }
+
+  function amountOn(it, on) {
+    let years = Number(on.slice(0, 4)) - Number(anchorYear(it));
+    if (on.slice(5) < it.anchor.slice(5)) years -= 1;
+    years = Math.max(0, years);
+    const grown = it.amount * Math.pow(1 + (it.growth || 0), years);
+    return cents(grown * (it.income ? (it.collection == null ? 1 : it.collection) : 1));
+  }
+  const anchorYear = (it) => it.anchor.slice(0, 4);
+  function monthlyEq(it) {
+    if (it.cadence === 'once') return 0;
+    const base = it.amount * (it.income ? (it.collection == null ? 1 : it.collection) : 1);
+    return cents((base * PER_YEAR[it.cadence]) / 12);
+  }
+  function itemEvents(it, start, end) {
+    const stop = it.end && it.end < end ? it.end : end;
+    return occurrences(it.cadence, it.anchor, start, stop, it.second || 15).map((d) => ({
+      on: d, label: it.label, category: it.category, amount: amountOn(it, d), income: !!it.income,
+      essential: !!it.essential, src: it.src || null }));
+  }
+
+  const payNet = (pc) => cents(pc.gross - (pc.taxes || 0) - (pc.k401 || 0) - (pc.hsa || 0) - (pc.ins || 0) - (pc.other || 0));
+  const grossFromSalary = (sal, cad) => cents(sal / PER_YEAR[cad]);
+  function payDates(pc, start, end) {
+    const stop = pc.end && pc.end < end ? pc.end : end;
+    const raw = occurrences(pc.cadence, pc.first, addDays(start, -3), addDays(stop, 3), pc.second || 15);
+    const out = [];
+    for (let d of raw) {
+      if (pc.shift !== false) {
+        const dow = new Date(pd(d)).getUTCDay();
+        if (dow === 6) d = addDays(d, -1); else if (dow === 0) d = addDays(d, -2);
+      }
+      if (d >= start && d <= stop) out.push(d);
+    }
+    return out;
+  }
+  function payEvents(pc, start, end, idx) {
+    const net = payNet(pc);
+    return payDates(pc, start, end).map((d) => ({ on: d, label: `${pc.employer || 'Employer'} paycheck`,
+      category: 'Employment income', amount: net, income: true, essential: false, src: `pay:${idx}` }));
+  }
+
+  function buildTimeline(opening, events, start, end) {
+    const inside = events.filter((e) => e.on >= start && e.on <= end).sort((a, b) =>
+      a.on < b.on ? -1 : a.on > b.on ? 1 : (a.income - b.income) || (a.label < b.label ? -1 : a.label > b.label ? 1 : 0));
+    let bal = opening; const bals = [];
+    for (const e of inside) { bal += e.income ? e.amount : -e.amount; bals.push(cents(bal)); }
+    return { opening, start, end, events: inside, balances: bals };
+  }
+  function balanceOn(tl, day) {
+    let bal = tl.opening;
+    for (let i = 0; i < tl.events.length; i++) { if (tl.events[i].on > day) break; bal = tl.balances[i]; }
+    return bal;
+  }
+  function minBalance(tl, from, to) {
+    let entering = tl.opening, low = null;
+    for (let i = 0; i < tl.events.length; i++) {
+      const e = tl.events[i];
+      if (e.on > to) break;
+      if (e.on < from) { entering = tl.balances[i]; continue; }
+      low = low == null ? tl.balances[i] : Math.min(low, tl.balances[i]);
+    }
+    return low == null ? entering : Math.min(entering, low);
+  }
+
+  const monthStart = (s) => s.slice(0, 7) + '-01';
+  function rollup(tl, months) {
+    const rows = []; let cash = tl.opening; let m0 = monthStart(tl.start);
+    for (let i = 0; i < months; i++) {
+      const key = m0.slice(0, 7);
+      const evs = tl.events.filter((e) => e.on.slice(0, 7) === key);
+      const cat = {}; let inc = 0, out = 0;
+      for (const e of evs) { cat[e.category] = (cat[e.category] || 0) + (e.income ? e.amount : -e.amount); if (e.income) inc += e.amount; else out += e.amount; }
+      rows.push({ month: m0, start: cash, cat, income: cents(inc), outflow: cents(out), net: cents(inc - out), end: cents(cash + inc - out) });
+      cash = cents(cash + inc - out); m0 = addMonths(m0, 1);
+    }
+    return rows;
+  }
+
+  /* ---- plan ---- */
+  function planEvents(plan, end) {
+    let evs = (plan.oneOffs || []).slice();
+    plan.paychecks.forEach((pc, i) => { evs = evs.concat(payEvents(pc, plan.start, end, i)); });
+    plan.items.forEach((it) => { evs = evs.concat(itemEvents(it, plan.start, end)); });
+    return evs.filter((e) => e.on >= plan.start && e.on <= end);
+  }
+  function timeline(plan, months, extra) {
+    const end = addDays(addMonths(plan.start, months), -1);
+    return buildTimeline(plan.opening, planEvents(plan, end).concat((extra || []).filter((e) => e.on <= end)), plan.start, end);
+  }
+  const sum = (a) => a.reduce((x, y) => x + y, 0);
+  function planStats(plan) {
+    const pay = sum(plan.paychecks.map((pc) => (payNet(pc) * PER_YEAR[pc.cadence]) / 12));
+    const other = sum(plan.items.filter((i) => i.income).map(monthlyEq));
+    const income = cents(pay + other);
+    const out = sum(plan.items.filter((i) => !i.income).map(monthlyEq));
+    const ess = sum(plan.items.filter((i) => !i.income && i.essential).map(monthlyEq));
+    const earmark = plan.earmarked || 0;
+    return { income, outflows: cents(out), essentials: cents(ess), earmarked: earmark, fcf: cents(income - out - earmark),
+      fcfBeforeEarmarks: cents(income - out) };
+  }
+
+  /* ---- loans / car ---- */
+  function loanPayment(principal, annualRate, n) {
+    if (principal <= 0) return 0;
+    const i = annualRate / 12;
+    if (i === 0) return cents(principal / n);
+    const f = Math.pow(1 + i, n);
+    return cents((principal * i * f) / (f - 1));
+  }
+  function carDerived(c) {
+    const taxBase = c.taxNetOfTradeIn === false ? c.price : Math.max(c.price - (c.tradeIn || 0), 0);
+    const tax = cents(taxBase * (c.taxRate || 0));
+    const fees = (c.titleReg || 0) + (c.dealerFees || 0);
+    let loan = c.price - (c.down || 0) - (c.tradeIn || 0);
+    if (c.financeFees) loan += tax + fees;
+    loan = Math.max(loan, 0);
+    const cash = cents((c.down || 0) + (c.financeFees ? 0 : tax + fees));
+    const payment = loanPayment(loan, c.rate || 0, c.term || 60);
+    const running = cents((c.insIncrease || 0) + (c.fuel || 0) + (c.maint || 0) + (c.regRenewal || 0) / 12);
+    return { tax, fees, loan, cash, payment, running, ownership: cents(payment + running) };
+  }
+  function carEvents(c, on, end, label = 'Car') {
+    const d = carDerived(c); const evs = [];
+    if (d.cash > 0) evs.push({ on, label: `${label}: cash at purchase`, category: 'Large purchases', amount: d.cash, income: false, essential: false, src: 'car' });
+    const first = addMonths(on, 1);
+    const mk = (lab, amt, endD) => itemEvents({ label: `${label}: ${lab}`, category: 'Transportation', amount: cents(amt), cadence: 'monthly',
+      anchor: first, income: false, essential: true, end: endD, src: 'car' }, on, end);
+    if (d.payment > 0) evs.push(...mk('loan payment', d.payment, addMonths(first, (c.term || 60) - 1)));
+    if (c.insIncrease > 0) evs.push(...mk('insurance increase', c.insIncrease));
+    if (c.fuel > 0) evs.push(...mk('fuel', c.fuel));
+    if (c.maint > 0) evs.push(...mk('maintenance', c.maint));
+    if (c.regRenewal > 0) evs.push(...mk('registration (averaged)', c.regRenewal / 12));
+    return evs;
+  }
+
+  /* ---- safety ---- */
+  function assess(plan, rules, car, on) {
+    const horizon = addMonths(on, 12);
+    const months = (Number(horizon.slice(0, 4)) - Number(plan.start.slice(0, 4))) * 12 + Number(horizon.slice(5, 7)) - Number(plan.start.slice(5, 7)) + 1;
+    const d = carDerived(car);
+    const tl = timeline(plan, months, carEvents(car, on, addMonths(plan.start, months)));
+    const st = planStats(plan);
+    const cashAfter = balanceOn(tl, on), low = minBalance(tl, on, horizon);
+    const ess = st.essentials + d.ownership;
+    const em = ess > 0 ? cashAfter / ess : 999;
+    const fcf = st.fcf - d.ownership;
+    const v = []; let red = false;
+    if (low < rules.buffer) { v.push({ rule: 'buffer', msg: `Cash falls to ${Math.round(low).toLocaleString()} (minimum buffer ${Math.round(rules.buffer).toLocaleString()})` }); red = red || low < 0; }
+    if (em < rules.emMonths) { v.push({ rule: 'emergency', msg: `${em.toFixed(1)} months of essentials remain (target ${rules.emMonths})` }); red = red || em < rules.emMonths * rules.redFrac; }
+    if (fcf < rules.minFcf) { v.push({ rule: 'free cash flow', msg: `Free cash flow ${Math.round(fcf).toLocaleString()}/mo (minimum ${Math.round(rules.minFcf).toLocaleString()})` }); red = red || fcf < 0; }
+    return { status: red ? 'RED' : v.length ? 'YELLOW' : 'GREEN', violations: v, cashNeeded: d.cash, payment: d.payment,
+      ownership: d.ownership, running: d.running, loan: d.loan, cashAfter, minCash: low, emMonths: Math.round(em * 10) / 10, fcfAfter: cents(fcf),
+      cash3: balanceOn(tl, addMonths(on, 3)), cash6: balanceOn(tl, addMonths(on, 6)), cash12: balanceOn(tl, horizon),
+      opportunity: cents(d.cash + 12 * d.ownership), tl };
+  }
+  function availability(plan, rules, months) {
+    const tl = timeline(plan, months + 12); const st = planStats(plan);
+    const reserve = rules.buffer + rules.emMonths * st.essentials; const out = [];
+    for (let i = 0; i < months; i++) {
+      let d = addMonths(monthStart(plan.start), i); if (d < plan.start) d = plan.start;
+      const ahead = minBalance(tl, d, tl.end);
+      out.push({ month: d, cash: d > plan.start ? balanceOn(tl, addDays(d, -1)) : plan.opening, ahead, aboveBuffer: cents(ahead - rules.buffer), aboveReserve: cents(ahead - reserve) });
+    }
+    return out;
+  }
+  function earliestSafe(plan, rules, car, within = 36) {
+    for (let i = 0; i <= within; i++) {
+      let d = addMonths(monthStart(plan.start), i); if (d < plan.start) d = plan.start;
+      if (assess(plan, rules, car, d).status === 'GREEN') return d;
+    }
+    return null;
+  }
+  function maxBudget(plan, rules, on, build, step = 100, ceiling = 500000) {
+    if (assess(plan, rules, build(step), on).status !== 'GREEN') return 0;
+    let lo = 0, hi = Math.floor(ceiling / step);
+    while (lo < hi) { const mid = Math.floor((lo + hi + 1) / 2); if (assess(plan, rules, build(step * mid), on).status === 'GREEN') lo = mid; else hi = mid - 1; }
+    return step * lo;
+  }
+  function payWindows(plan, rules, months) {
+    const tl = timeline(plan, months + 1);
+    const days = [...new Set(tl.events.filter((e) => e.category === 'Employment income').map((e) => e.on))].sort();
+    if (days.length && days[0] > plan.start) days.unshift(plan.start);
+    const out = [];
+    for (let i = 0; i < days.length - 1; i++) {
+      const d = days[i], nxt = days[i + 1];
+      const win = tl.events.filter((e) => e.on >= d && e.on < nxt);
+      const net = sum(win.filter((e) => e.category === 'Employment income').map((e) => e.amount));
+      const entering = balanceOn(tl, addDays(d, -1));
+      const endBal = cents(entering + sum(win.map((e) => (e.income ? e.amount : -e.amount))));
+      const rows = tl.events.map((e, j) => [e, tl.balances[j], j]);
+      const payIdx = rows.filter(([e]) => e.on === d && e.category === 'Employment income').map(([, , j]) => j);
+      const after = payIdx.length ? rows.filter(([e, , j]) => j >= Math.max(...payIdx) && e.on < nxt).map(([, b]) => b)
+        : [entering].concat(rows.filter(([e]) => e.on >= d && e.on < nxt).map(([, b]) => b));
+      out.push({ pay: d, next: nxt, net, entering, obligations: win.filter((e) => !e.income), inflows: win.filter((e) => e.income && e.category !== 'Employment income'),
+        endBal, safe: Math.max(0, cents(Math.min(...after) - rules.buffer)) });
+    }
+    return out;
+  }
+
+  /* ---- mortgage ---- */
+  function amortSchedule(balance, annualRate, payment, firstDue, maxRows = 600) {
+    const rows = []; let bal = balance; const i = annualRate / 12;
+    for (let n = 0; n < maxRows && bal > 0.005; n++) {
+      const interest = cents(bal * i); let principal = cents(payment - interest);
+      if (principal <= 0) break;
+      if (principal > bal || bal - principal < 0.005) principal = cents(bal);
+      bal = cents(bal - principal);
+      rows.push({ n: n + 1, due: addMonths(firstDue, n), interest, principal, balance: bal, payment: cents(interest + principal) });
+    }
+    return rows;
+  }
+
+  return { pd, iso, addDays, addMonths, diffDays, cents, PER_YEAR, PAY, occurrences, amountOn, monthlyEq, itemEvents, payNet, grossFromSalary,
+    payDates, payEvents, buildTimeline, balanceOn, minBalance, rollup, planEvents, timeline, planStats, loanPayment, carDerived, carEvents,
+    assess, availability, earliestSafe, maxBudget, payWindows, amortSchedule, monthStart, sum };
+})();
+</script>
+
+<script id="selftest">
+/* Hand-computed checks, same numbers as tests/test_planning.py. Run window.__selfTest() in the console. */
+window.__selfTest = () => {
+  const E = Engine, fails = [];
+  const eq = (name, a, b) => { if (Math.abs(a - b) > 0.005) fails.push(`${name}: got ${a}, want ${b}`); };
+  eq('net paycheck', E.payNet({ gross: 3000, taxes: 600, k401: 150, hsa: 50, ins: 100 }), 2100);
+  eq('gross from salary', E.grossFromSalary(78000, 'biweekly'), 3000);
+  const days = E.payDates({ cadence: 'biweekly', first: '2026-01-02', gross: 1 }, '2026-01-01', '2026-12-31');
+  eq('biweekly count', days.length, 26);
+  const per = {}; days.forEach((d) => { per[d.slice(5, 7)] = (per[d.slice(5, 7)] || 0) + 1; });
+  eq('three-paycheck months', Object.values(per).filter((n) => n === 3).length, 2);
+  eq('weekly count', E.payDates({ cadence: 'weekly', first: '2026-01-02', gross: 1 }, '2026-01-01', '2026-12-31').length, 52);
+  const sm = E.payDates({ cadence: 'semimonthly', first: '2026-11-01', gross: 1 }, '2026-10-25', '2026-11-30');
+  if (!sm.includes('2026-10-30') || !sm.includes('2026-11-13')) fails.push('weekend shift ' + sm);
+  const mo = E.occurrences('monthly', '2027-01-31', '2027-01-01', '2027-04-30');
+  if (mo.join() !== '2027-01-31,2027-02-28,2027-03-31,2027-04-30') fails.push('month clamp ' + mo);
+  const rent = { label: 'r', category: 'Rental income', amount: 1800, cadence: 'monthly', anchor: '2026-11-01', income: true, collection: 0.95, growth: 0.03 };
+  eq('rent monthly eq', E.monthlyEq(rent), 1710); eq('rent after raise', E.amountOn(rent, '2027-11-01'), 1761.3);
+  const c1 = E.carDerived({ price: 40000, down: 10000, taxRate: 0.06, titleReg: 200, dealerFees: 100, rate: 0, term: 60 });
+  eq('car cash', c1.cash, 12700); eq('car loan', c1.loan, 30000); eq('car payment', c1.payment, 500);
+  eq('financed fees', E.carDerived({ price: 40000, down: 10000, taxRate: 0.06, titleReg: 300, financeFees: true, term: 60 }).loan, 32700);
+  eq('trade-in tax', E.carDerived({ price: 40000, down: 5000, tradeIn: 5000, taxRate: 0.06 }).tax, 2100);
+  eq('6% 60mo payment', E.loanPayment(30000, 0.06, 60), 579.98);
+  eq('ownership', E.carDerived({ price: 30000, term: 60, rate: 0, insIncrease: 100, fuel: 150, maint: 50, regRenewal: 120 }).ownership, 810);
+  const s = '2026-10-01';
+  const plan = { start: s, opening: 50000, earmarked: 0, oneOffs: [],
+    paychecks: [{ employer: 'A', cadence: 'biweekly', first: '2026-10-02', gross: 3000, taxes: 600, k401: 150, hsa: 50, ins: 100, shift: true }],
+    items: [
+      { label: 'Mortgage', category: 'Mortgage', amount: 3000, cadence: 'monthly', anchor: s, essential: true },
+      { label: 'Utilities', category: 'Utilities', amount: 300, cadence: 'monthly', anchor: s, essential: true },
+      { label: 'Food', category: 'Food', amount: 600, cadence: 'monthly', anchor: s, essential: true },
+      { label: 'Rent', category: 'Rental income', amount: 1800, cadence: 'monthly', anchor: '2026-10-03', income: true, collection: 0.95 },
+      { label: 'Savings', category: 'Savings', amount: 500, cadence: 'monthly', anchor: s }] };
+  const st = E.planStats(plan);
+  eq('income', st.income, 6260); eq('outflows', st.outflows, 4400); eq('essentials', st.essentials, 3900); eq('fcf', st.fcf, 1860);
+  eq('october end', E.balanceOn(E.timeline(plan, 1), '2026-10-31'), 50000 + 6300 + 1710 - 4400);
+  const rules = { emMonths: 6, buffer: 2000, minFcf: 500, redFrac: 0.5 };
+  const cash = (p) => ({ price: p, down: p, term: 60 });
+  eq('cash after', E.assess(plan, rules, cash(20000), s).cashAfter, 25600);
+  const st2 = (p) => E.assess(plan, rules, cash(p), s).status;
+  if (st2(20000) !== 'GREEN' || st2(30000) !== 'YELLOW' || st2(60000) !== 'RED') fails.push('ladder ' + [st2(20000), st2(30000), st2(60000)]);
+  const build = (p) => ({ price: p, down: p * 0.2, rate: 0.06, term: 60 });
+  const best = E.maxBudget(plan, rules, s, build);
+  if (!(best > 0) || E.assess(plan, rules, build(best), s).status !== 'GREEN' || E.assess(plan, rules, build(best + 100), s).status === 'GREEN') fails.push('max budget ' + best);
+  const pw = { start: '2026-10-01', opening: 500, earmarked: 0, oneOffs: [],
+    paychecks: [{ employer: 'A', cadence: 'semimonthly', first: '2026-10-01', gross: 2000, shift: false }],
+    items: [{ label: 'Electric', category: 'Utilities', amount: 800, cadence: 'once', anchor: '2026-10-05' },
+      { label: 'Rent', category: 'Rental income', amount: 1000, cadence: 'once', anchor: '2026-10-10', income: true }] };
+  const w = E.payWindows(pw, { buffer: 1000 }, 1)[0];
+  eq('window end', w.endBal, 2700); eq('window safe', w.safe, 700);
+  const am = E.amortSchedule(100000, 0.06, 599.55, '2026-01-01');
+  eq('amort pays off', am[am.length - 1].balance, 0);
+  return fails.length ? fails : 'ALL PASS';
+};
+</script>
+
+<script id="app">
+/* ===================== APP ===================== */
+const E = Engine;
+const KEY = 'pcfo-plan-v1';
+const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const TODAY = todayIso();
+const fmt = (n) => (n == null || isNaN(n) ? '—' : (n < 0 ? '-$' : '$') + Math.abs(Math.round(n)).toLocaleString('en-US'));
+const fmt2 = (n) => (n == null || isNaN(n) ? '—' : (n < 0 ? '-$' : '$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmtDate = (s) => (s ? new Date(E.pd(s)).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) : '—');
+const fmtMonth = (s) => new Date(E.pd(s)).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const pct = (x, d = 1) => (x * 100).toFixed(d) + '%';
+const nextDow = (from, dow) => { let d = from; while (new Date(E.pd(d)).getUTCDay() !== dow) d = E.addDays(d, 1); return d; };
+const nextDom = (from, day) => { let d = E.addMonths(from.slice(0, 7) + '-01', 0, day); if (d <= from) d = E.addMonths(from.slice(0, 7) + '-01', 1, day); return d; };
+
+const EXP_CATS = ['Housing', 'Utilities', 'Transportation', 'Insurance', 'Food', 'Healthcare', 'Subscriptions', 'Entertainment', 'Travel', 'Personal', 'Debt', 'Taxes', 'Other'];
+const FREQS = ['weekly', 'biweekly', 'semimonthly', 'monthly', 'quarterly', 'annual', 'once'];
+const COLS = ['Mortgage', 'Housing', 'Utilities', 'Transportation', 'Insurance', 'Food', 'Debt', 'Discretionary', 'Investments', 'Savings', 'Other', 'Large purchases'];
+const DISC = new Set(['Subscriptions', 'Entertainment', 'Travel', 'Personal', 'Discretionary']);
+const colOf = (cat) => (DISC.has(cat) ? 'Discretionary' : COLS.includes(cat) ? cat : 'Other');
+const ALLOC = ['Mortgage/Housing', 'Utilities', 'Insurance', 'Transportation', 'Groceries', 'Discretionary', 'Savings', 'Investments', 'Car Fund', 'Emergency Fund', 'Other'];
+
+function seed() {
+  const t = TODAY;
+  return {
+    v: 1, example: true, setupDone: false,
+    cash: { checking: 6500, savings: 24000, investments: 18000, retirement: 42000, home: 480000, other: 0 },
+    paychecks: [{ employer: 'Employer', cadence: 'biweekly', first: nextDow(E.addDays(t, 1), 5), annual: 110000, gross: '', taxes: 960, k401: 210, hsa: 60, ins: 110, other: 0 }],
+    mortgage: { original: 380000, rate: 0.0625, term: 360, first: E.addMonths(t, -24).slice(0, 8) + '01', pi: '', currentPrincipal: '', tax: 520, ins: 140, pmi: 0, hoa: 0, other: 0, extra: 0, dueDay: 1 },
+    rental: { label: 'Unit B tenant', rent: 1800, dueDay: 3, leaseStart: E.addMonths(t, -8), leaseEnd: E.addMonths(t, 4), growth: 0.03, vacancy: 0.05, repairs: 90, utilities: 60, other: 25 },
+    expenses: [
+      { name: 'Utilities (electric, gas, water)', cat: 'Utilities', amount: 280, freq: 'monthly', due: nextDom(t, 15), end: '', fixed: false, essential: true, acct: 'Checking', growth: 0.03 },
+      { name: 'Groceries', cat: 'Food', amount: 160, freq: 'weekly', due: nextDow(E.addDays(t, 1), 6), end: '', fixed: false, essential: true, acct: 'Checking', growth: 0.03 },
+      { name: 'Auto and renters insurance', cat: 'Insurance', amount: 140, freq: 'monthly', due: nextDom(t, 20), end: '', fixed: true, essential: true, acct: 'Checking', growth: 0.03 },
+      { name: 'Phone and subscriptions', cat: 'Subscriptions', amount: 90, freq: 'monthly', due: nextDom(t, 12), end: '', fixed: true, essential: false, acct: 'Credit card', growth: 0 },
+      { name: 'Dining and entertainment', cat: 'Entertainment', amount: 450, freq: 'monthly', due: nextDom(t, 25), end: '', fixed: false, essential: false, acct: 'Credit card', growth: 0.03 },
+      { name: 'Current car fuel and upkeep', cat: 'Transportation', amount: 160, freq: 'monthly', due: nextDom(t, 8), end: '', fixed: false, essential: true, acct: 'Credit card', growth: 0.03 },
+    ],
+    goals: [
+      { name: 'Emergency Fund', kind: 'liquid', target: 30000, current: 12000, monthly: 400, date: E.addMonths(t, 46), priority: 1, min: 0 },
+      { name: 'Car Fund', kind: 'liquid', target: 9000, current: 3500, monthly: 600, date: E.addMonths(t, 9), priority: 2, min: 0 },
+      { name: 'Vacation', kind: 'liquid', target: 3000, current: 600, monthly: 150, date: E.addMonths(t, 16), priority: 4, min: 0 },
+      { name: 'Roth IRA / brokerage', kind: 'invest', target: 50000, current: 18000, monthly: 400, date: E.addMonths(t, 84), priority: 3, min: 0 },
+    ],
+    debts: [{ name: 'Credit card', type: 'Credit card', balance: 1800, rate: 0.2199, payment: 200 }],
+    rules: { emMonths: 6, buffer: 2000, minFcf: 500, minSavePct: 0.1, redFrac: 0.5 },
+    purchases: [{ name: 'Water heater replacement', date: E.addMonths(t, 4), amount: 1800 }],
+    car: { label: 'Target car', price: 32000, down: 7000, tradeIn: 0, taxRate: 0.06, titleReg: 200, dealerFees: 400, rate: 0.065, term: 60, financeFees: false,
+      insIncrease: 60, fuel: 110, maint: 50, regRenewal: 60, date: E.addMonths(t, 3) },
+    budget: { downPct: 0.2, rate: 0.065, term: 60 },
+    scenarios: [
+      { name: 'Base case', salaryPct: 0, expensePct: 0, discPct: 0, rentPct: 100, extraSave: 0, emMonths: '', bonus: 0, car: false, loseRent: false },
+      { name: 'Conservative', salaryPct: -10, expensePct: 10, discPct: 0, rentPct: 85, extraSave: 0, emMonths: 9, bonus: 0, car: false, loseRent: false },
+      { name: 'Aggressive savings', salaryPct: 0, expensePct: 0, discPct: -30, rentPct: 100, extraSave: 500, emMonths: '', bonus: 0, car: false, loseRent: false },
+      { name: 'Car purchase', salaryPct: 0, expensePct: 0, discPct: 0, rentPct: 100, extraSave: 0, emMonths: '', bonus: 0, car: true, loseRent: false },
+      { name: 'Income change', salaryPct: -15, expensePct: 0, discPct: 0, rentPct: 100, extraSave: 0, emMonths: '', bonus: 0, car: false, loseRent: true },
+    ],
+    actuals: {},
+  };
+}
+
+let S;
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) { const o = JSON.parse(raw); if (o && o.v === 1) return o; } } catch (e) { /* storage unavailable */ }
+  return seed();
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+S = load();
+
+/* ---------- derive plan from state ---------- */
+function mortgageCalc(m) {
+  const pi = m.pi !== '' && m.pi != null ? Number(m.pi) : E.loanPayment(m.original, m.rate, m.term);
+  const escrow = (m.tax || 0) + (m.ins || 0) + (m.pmi || 0);
+  const sched = (() => {
+    if (m.currentPrincipal !== '' && m.currentPrincipal != null && Number(m.currentPrincipal) > 0) {
+      return E.amortSchedule(Number(m.currentPrincipal), m.rate, pi + (m.extra || 0), nextDom(TODAY, m.dueDay || 1));
+    }
+    const full = E.amortSchedule(m.original, m.rate, pi + (m.extra || 0), m.first);
+    return full.filter((r) => r.due >= E.monthStart(TODAY));
+  })();
+  let bal = sched.length ? sched[0].balance + sched[0].principal : 0;
+  if (m.currentPrincipal === '' || m.currentPrincipal == null) {
+    const full = E.amortSchedule(m.original, m.rate, pi + (m.extra || 0), m.first);
+    const paid = full.filter((r) => r.due < E.monthStart(TODAY));
+    bal = paid.length ? paid[paid.length - 1].balance : m.original;
+  } else bal = Number(m.currentPrincipal);
+  const next = sched[0] || { interest: 0, principal: 0 };
+  const total = E.cents(pi + (m.extra || 0) + escrow + (m.hoa || 0) + (m.other || 0));
+  return { pi, escrow, balance: bal, sched, nextInterest: next.interest, nextPrincipal: next.principal, total,
+    annual: E.cents(total * 12), housingOnly: E.cents(escrow + (m.hoa || 0) + (m.other || 0)) };
+}
+
+function derive(st, opts = {}) {
+  const start = TODAY; const items = []; let oneOffs = [];
+  const m = st.mortgage, mc = mortgageCalc(m);
+  const due = nextDom(start, m.dueDay || 1);
+  if (mc.pi + (m.extra || 0) > 0 || mc.escrow > 0) {
+    items.push({ label: 'Mortgage (P&I + escrow)', category: 'Mortgage', amount: E.cents(mc.pi + (m.extra || 0) + mc.escrow), cadence: 'monthly', anchor: due, essential: true, src: 'sec:mortgage:0' });
+  }
+  if ((m.hoa || 0) + (m.other || 0) > 0) items.push({ label: 'HOA / other property costs', category: 'Housing', amount: (m.hoa || 0) + (m.other || 0), cadence: 'monthly', anchor: due, essential: true, src: 'sec:mortgage:0' });
+  const r = st.rental;
+  const rentFactor = opts.rentFactor == null ? 1 : opts.rentFactor;
+  if (r.rent > 0) {
+    items.push({ label: `Rent: ${r.label || 'tenant'}`, category: 'Rental income', amount: r.rent * rentFactor, cadence: 'monthly', anchor: nextDom(start, r.dueDay || 1),
+      income: true, collection: 1 - (r.vacancy || 0), growth: r.growth || 0, end: r.leaseEnd || '', src: 'sec:rental:0' });
+  }
+  [['repairs', 'Rental repairs and maintenance'], ['utilities', 'Rental utilities paid by me'], ['other', 'Other rental property costs']].forEach(([k, lab]) => {
+    if (r[k] > 0) items.push({ label: lab, category: 'Housing', amount: r[k], cadence: 'monthly', anchor: nextDom(start, 10), essential: k === 'utilities', src: 'sec:rental:0' });
+  });
+  st.debts.forEach((d, i) => { if (d.payment > 0) items.push({ label: `Debt: ${d.name}`, category: 'Debt', amount: d.payment, cadence: 'monthly', anchor: nextDom(start, 18), essential: true, src: `sec:debts:${i}` }); });
+  st.expenses.forEach((x, i) => {
+    if (!(x.amount > 0) || !x.due) return;
+    items.push({ label: x.name || 'Expense', category: x.cat, amount: x.amount * (opts.expenseFactor ? opts.expenseFactor(x) : 1), cadence: x.freq, anchor: x.due,
+      essential: !!x.essential, end: x.end || '', growth: x.growth || 0, src: `sec:expenses:${i}` });
+  });
+  let earmarked = 0;
+  st.goals.forEach((g, i) => {
+    if (!(g.monthly > 0)) return;
+    if (g.kind === 'invest') items.push({ label: `Goal: ${g.name}`, category: 'Investments', amount: g.monthly, cadence: 'monthly', anchor: nextDom(start, 20), src: `sec:goals:${i}` });
+    else earmarked += g.monthly;
+  });
+  if (opts.extraSave > 0) items.push({ label: 'Extra investing (scenario)', category: 'Investments', amount: opts.extraSave, cadence: 'monthly', anchor: nextDom(start, 21) });
+  st.purchases.forEach((p, i) => { if (p.amount > 0 && p.date) oneOffs.push({ on: p.date, label: p.name || 'Purchase', category: 'Large purchases', amount: p.amount, income: false, essential: false, src: `sec:purchases:${i}` }); });
+  if (opts.bonus > 0) oneOffs.push({ on: E.addMonths(start, 3), label: 'Bonus (scenario)', category: 'Other income', amount: opts.bonus, income: true, essential: false });
+  const f = opts.salaryFactor == null ? 1 : opts.salaryFactor;
+  const paychecks = st.paychecks.map((p) => {
+    const gross = p.gross !== '' && p.gross != null ? Number(p.gross) : E.grossFromSalary(p.annual || 0, p.cadence);
+    return { employer: p.employer, cadence: p.cadence, first: p.first, gross: gross * f, taxes: (p.taxes || 0) * f, k401: (p.k401 || 0) * f, hsa: (p.hsa || 0) * f, ins: p.ins || 0, other: p.other || 0, shift: true };
+  });
+  const opening = (st.cash.checking || 0) + (st.cash.savings || 0);
+  return { start, opening, paychecks, items, oneOffs, earmarked, mc };
+}
+
+function rulesOf(st, over) {
+  const r = st.rules; return { emMonths: over && over.emMonths !== '' && over.emMonths != null ? Number(over.emMonths) : r.emMonths, buffer: r.buffer, minFcf: r.minFcf, redFrac: r.redFrac };
+}
+function carSpec(st, price, down, rate, term, extra = {}) {
+  const c = st.car;
+  return { price, down, tradeIn: 0, taxRate: c.taxRate, titleReg: c.titleReg, dealerFees: c.dealerFees, rate, term, financeFees: c.financeFees,
+    insIncrease: c.insIncrease, fuel: c.fuel, maint: c.maint, regRenewal: c.regRenewal, ...extra };
+}
+const carOf = (st) => ({ ...st.car });
+function budgetBuilder(st) { return (price) => carSpec(st, price, price * st.budget.downPct, st.budget.rate, st.budget.term); }
+
+/* ---------- memoised model ---------- */
+let M = null;
+function model() {
+  if (M) return M;
+  const plan = derive(S); const rules = rulesOf(S); const stats = E.planStats(plan);
+  const carDate = S.car.date || TODAY;
+  const tl = E.timeline(plan, 24);
+  const m = { plan, rules, stats, tl, mc: plan.mc, carDate };
+  m.months12 = E.rollup(E.timeline(plan, 12), 12);
+  m.avail = E.availability(plan, rules, 12);
+  m.windows = E.payWindows(plan, rules, 2);
+  m.car = carOf(S);
+  m.assess = E.assess(plan, rules, m.car, carDate < TODAY ? TODAY : carDate);
+  m.earliest = E.earliestSafe(plan, rules, m.car);
+  m.maxBudget = E.maxBudget(plan, rules, carDate < TODAY ? TODAY : carDate, budgetBuilder(S));
+  const housingItems = plan.items.filter((i) => !i.income && (i.category === 'Mortgage' || i.category === 'Housing'));
+  m.housing = E.sum(housingItems.map(E.monthlyEq));
+  m.rentMonthly = E.sum(plan.items.filter((i) => i.income && i.category === 'Rental income').map(E.monthlyEq));
+  m.rentalCosts = E.sum(plan.items.filter((i) => !i.income && i.src === 'sec:rental:0').map(E.monthlyEq));
+  m.emMonthsNow = stats.essentials > 0 ? plan.opening / stats.essentials : 999;
+  M = m; return m;
+}
+function invalidate() { M = null; }
+
+/* ---------- charts ---------- */
+function niceTicks(lo, hi, n = 4) {
+  if (hi === lo) { hi = lo + 1; }
+  const raw = (hi - lo) / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
+  const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+  const a = Math.floor(lo / step) * step, b = Math.ceil(hi / step) * step; const t = [];
+  for (let v = a; v <= b + step / 2; v += step) t.push(v);
+  return t;
+}
+const short = (n) => { const a = Math.abs(n); const s = a >= 1e6 ? (a / 1e6).toFixed(1) + 'M' : a >= 1e3 ? (a / 1e3).toFixed(a >= 1e4 ? 0 : 1).replace(/\.0$/, '') + 'k' : String(Math.round(a)); return (n < 0 ? '-' : '') + '$' + s; };
+function frame(w, h, ys, xt) {
+  const L = 54, R = 12, T = 10, B = 26; const lo = Math.min(...ys), hi = Math.max(...ys);
+  const ticks = niceTicks(Math.min(lo, 0 > lo ? lo : lo), hi); const y0 = ticks[0], y1 = ticks[ticks.length - 1];
+  const Y = (v) => T + (h - T - B) * (1 - (v - y0) / (y1 - y0 || 1));
+  let g = '';
+  ticks.forEach((t) => { g += `<line class="grid" x1="${L}" x2="${w - R}" y1="${Y(t)}" y2="${Y(t)}"/><text x="${L - 6}" y="${Y(t) + 4}" text-anchor="end">${short(t)}</text>`; });
+  return { L, R, T, B, Y, g, plotW: w - L - R };
+}
+function lineChart(series, { w = 720, h = 250, xticks = [], ref = null } = {}) {
+  const all = series.flatMap((s) => s.pts.map((p) => p[1])).concat(ref != null ? [ref] : []);
+  const f = frame(w, h, all); const xs = series.flatMap((s) => s.pts.map((p) => p[0])); const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  const X = (v) => f.L + (f.plotW * (v - x0)) / (x1 - x0 || 1);
+  let out = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Line chart">${f.g}`;
+  xticks.forEach((t) => { out += `<text x="${X(t.x)}" y="${h - 8}" text-anchor="middle">${esc(t.label)}</text>`; });
+  if (ref != null) out += `<line class="ref" x1="${f.L}" x2="${w - f.R}" y1="${f.Y(ref)}" y2="${f.Y(ref)}"/>`;
+  series.forEach((s) => {
+    const d = s.pts.map((p, i) => `${i ? 'L' : 'M'}${X(p[0]).toFixed(1)},${f.Y(p[1]).toFixed(1)}`).join('');
+    out += `<path d="${d}" class="${s.cls}" fill="none" stroke-width="2" stroke-linejoin="round"${s.dash ? ' stroke-dasharray="5 4"' : ''}/>`;
+    const lp = s.pts[s.pts.length - 1]; out += `<circle cx="${X(lp[0]).toFixed(1)}" cy="${f.Y(lp[1]).toFixed(1)}" r="3.5" class="${s.cls}"/>`;
+  });
+  return out + '</svg>' + legend(series.map((s) => [s.cls, s.name]).concat(ref != null ? [['', 'Minimum buffer (dashed)']] : []));
+}
+function legend(items) { return `<div class="legend">${items.map(([c, n]) => `<span>${c ? `<i class="${c}" style="background:currentColor;color:var(--c${c.slice(1)})"></i>` : ''}${esc(n)}</span>`).join('')}</div>`; }
+function barChart(cats, series, { w = 720, h = 240 } = {}) {
+  const all = series.flatMap((s) => s.vals).concat([0]); const f = frame(w, h, all);
+  const gw = f.plotW / cats.length, bw = Math.min(26, (gw * 0.8) / series.length);
+  let out = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Bar chart">${f.g}`;
+  cats.forEach((c, i) => {
+    const cx = f.L + gw * (i + 0.5);
+    series.forEach((s, j) => {
+      const v = s.vals[i], x = cx - (bw * series.length) / 2 + bw * j, y = f.Y(Math.max(v, 0)), y0 = f.Y(0);
+      out += `<rect x="${x.toFixed(1)}" y="${Math.min(y, y0).toFixed(1)}" width="${(bw - 2).toFixed(1)}" height="${Math.max(Math.abs(y0 - f.Y(v)), 1).toFixed(1)}" class="${s.cls}" rx="2"/>`;
+    });
+    out += `<text x="${cx}" y="${h - 8}" text-anchor="middle">${esc(c)}</text>`;
+  });
+  return out + '</svg>' + legend(series.map((s) => [s.cls, s.name]));
+}
+
+/* ---------- small UI helpers ---------- */
+const card = (l, v, f = '', cls = '', key = false) => `<div class="card${key ? ' key' : ''}"><div class="l">${l}</div><div class="v ${cls}">${v}</div>${f ? `<div class="f">${f}</div>` : ''}</div>`;
+const pill = (s) => `<span class="pill ${s}">${s}</span>`;
+const tip = (t, text) => `<span class="tip" title="${esc(text)}">${t}</span>`;
+
+/* ---------- alerts ---------- */
+function alerts() {
+  const m = model(), out = [];
+  const lowest = E.minBalance(m.tl, TODAY, E.addDays(E.addMonths(TODAY, 12), -1));
+  if (lowest < m.rules.buffer) out.push([lowest < 0 ? 'bad' : '', `Projected cash falls to ${fmt(lowest)} in the next 12 months, below your ${fmt(m.rules.buffer)} buffer.`]);
+  if (m.emMonthsNow < m.rules.emMonths) out.push(['', `Emergency fund covers ${m.emMonthsNow.toFixed(1)} months of essentials; your target is ${m.rules.emMonths}.`]);
+  if (m.stats.fcf < 0) out.push(['bad', `Monthly free cash flow is ${fmt(m.stats.fcf)}: you are projected to spend more than you earn after savings.`]);
+  else if (m.stats.fcf < m.rules.minFcf) out.push(['', `Free cash flow ${fmt(m.stats.fcf)}/mo is under your ${fmt(m.rules.minFcf)} minimum.`]);
+  const deficits = m.months12.filter((r) => r.net < 0);
+  if (deficits.length && m.stats.fcf >= 0) out.push(['', `${deficits.length} month${deficits.length > 1 ? 's' : ''} in the next year have negative cash flow (${deficits.slice(0, 3).map((r) => fmtMonth(r.month)).join(', ')}).`]);
+  S.purchases.filter((p) => p.date >= TODAY && p.date <= E.addDays(TODAY, 60) && p.amount >= 1000).forEach((p) => out.push(['', `${p.name || 'Purchase'} of ${fmt(p.amount)} is due ${fmtDate(p.date)}.`]));
+  if (S.rental.rent > 0 && S.rental.leaseEnd && S.rental.leaseEnd < E.addMonths(TODAY, 3)) out.push(['', `Lease for ${esc(S.rental.label)} ends ${fmtDate(S.rental.leaseEnd)}; rent stops after that in the forecast.`]);
+  if (S.car.price > 0 && m.assess.violations.some((v) => v.rule === 'emergency')) out.push([m.assess.status === 'RED' ? 'bad' : '', `Buying the ${esc(S.car.label)} on ${fmtDate(m.carDate)} would leave ${m.assess.emMonths} months of essentials (target ${m.rules.emMonths}).`]);
+  S.goals.forEach((g) => {
+    if (g.target > g.current && g.date) {
+      const need = (g.target - g.current) / Math.max(E.diffDays(g.date, TODAY) / 30.44, 0.1);
+      if (g.monthly < need * 0.95) out.push(['', `${esc(g.name)}: at ${fmt(g.monthly)}/mo it misses the ${fmtDate(g.date)} target; about ${fmt(need)}/mo is needed.`]);
+    }
+  });
+  const key = E.monthStart(TODAY).slice(0, 7), act = S.actuals[key];
+  if (act) {
+    const plan = plannedByCol(); let over = 0;
+    COLS.filter((c) => c !== 'Mortgage').forEach((c) => { if (act[c] != null && act[c] !== '' && plan[c] > 0 && act[c] > plan[c] * 1.1) over++; });
+    if (over) out.push(['', `${over} spending ${over > 1 ? 'categories are' : 'category is'} over budget this month by more than 10%.`]);
+  }
+  return out;
+}
+
+/* ---------- tabs ---------- */
+const TABS = [['overview', 'Overview'], ['cashflow', 'Cash flow'], ['paychecks', 'Paychecks'], ['calendar', 'Calendar'], ['housing', 'Housing'], ['car', 'Car & purchases'],
+  ['scenarios', 'Scenarios'], ['actual', 'Plan vs actual'], ['networth', 'Net worth'], ['inputs', 'Inputs'], ['setup', 'Setup']];
+let tab = 'overview', cfView = 'monthly', calMonth = E.monthStart(TODAY), actMonth = E.monthStart(TODAY).slice(0, 7), wizStep = 0, afford = null, focusAfter = null;
+try { const h = location.hash.replace('#', ''); if (TABS.some((t) => t[0] === h)) tab = h; } catch (e) { /* ignore */ }
+
+function renderTabs() {
+  document.getElementById('tabs').innerHTML = TABS.map(([k, l]) => `<button role="tab" type="button" data-tab="${k}" aria-selected="${k === tab}">${l}</button>`).join('');
+  document.getElementById('asof').textContent = `as of ${fmtDate(TODAY)}`;
+}
+function render() {
+  const fn = { overview: vOverview, cashflow: vCashflow, paychecks: vPaychecks, calendar: vCalendar, housing: vHousing, car: vCar, scenarios: vScenarios, actual: vActual, networth: vNetWorth, inputs: vInputs, setup: vSetup }[tab];
+  const el = document.getElementById('view');
+  const sy = window.scrollY;
+  el.innerHTML = (S.example && tab !== 'inputs' && tab !== 'setup' ? `<div class="banner"><strong>These are example numbers.</strong> Replace them under <a href="#setup" data-go="setup">Setup</a> or <a href="#inputs" data-go="inputs">Inputs</a>. What you enter stays in this browser only; nothing is sent anywhere.</div>` : '') + fn();
+  renderTabs();
+  if (focusAfter) { const t = document.getElementById(focusAfter); focusAfter = null; if (t) { t.scrollIntoView({ block: 'center' }); t.classList.add('flash'); } } else window.scrollTo(0, tab === lastTab ? sy : 0);
+  lastTab = tab;
+}
+let lastTab = '';
+
+/* ---------- Overview ---------- */
+function vOverview() {
+  const m = model(), st = m.stats, a = m.assess;
+  const carFund = S.goals.find((g) => /car/i.test(g.name));
+  const al = alerts();
+  const avail = m.avail; const topA = Math.max(1, ...avail.map((x) => x.aboveBuffer));
+  const ahead = m.tl; const base = [], withCar = [];
+  const carTl = a.tl;
+  const days = E.diffDays(m.tl.end, m.tl.start);
+  const sample = (tl) => { const pts = []; for (let i = 0; i <= 365; i += 5) pts.push([i, E.balanceOn(tl, E.addDays(TODAY, i))]); return pts; };
+  base.push(...sample(ahead)); withCar.push(...sample(carTl));
+  const xt = []; for (let i = 0; i < 12; i += 2) xt.push({ x: E.diffDays(E.addMonths(E.monthStart(TODAY), i), TODAY), label: fmtMonth(E.addMonths(E.monthStart(TODAY), i)).split(' ')[0] });
+  const series = [{ name: 'Without purchase', cls: 's1', pts: base }];
+  if (S.car.price > 0) series.push({ name: `With ${esc(S.car.label)} on ${fmtDate(m.carDate)}`, cls: 's2', pts: withCar, dash: true });
+  return `
+  <div><h1>Where you stand and when you can buy</h1><p class="sub">Everything below is calculated from the assumptions under Inputs. Forecast, not actuals.</p></div>
+  <div class="cards">
+    ${card('Current cash', fmt(m.plan.opening), `Checking ${fmt(S.cash.checking)} · savings ${fmt(S.cash.savings)}`, '', true)}
+    ${card('Monthly net income', fmt(st.income), `${tip('after payroll withholding', 'Paychecks are net of taxes, 401(k), HSA and insurance. Rent is shown after the vacancy assumption.')} and vacancy`)}
+    ${card('Monthly expenses', fmt(st.outflows), 'bills, debt, investing')}
+    ${card('Free cash flow', fmt(st.fcf), `after ${fmt(st.earmarked)}/mo set aside for goals`, st.fcf >= m.rules.minFcf ? 'pos' : st.fcf >= 0 ? 'warn' : 'neg', true)}
+    ${card('Net housing cost', fmt(m.housing - m.rentMonthly), `${fmt(m.housing)} cost less ${fmt(m.rentMonthly)} rent`)}
+    ${card('Emergency fund', m.emMonthsNow >= 99 ? '—' : m.emMonthsNow.toFixed(1) + ' mo', `target ${m.rules.emMonths} months of essentials`, m.emMonthsNow >= m.rules.emMonths ? 'pos' : 'warn')}
+    ${card('Car fund', fmt(carFund ? carFund.current : 0), carFund ? `${fmt(carFund.monthly)}/mo → ${fmt(carFund.target)} target` : 'no goal named Car Fund')}
+    ${card('Earliest safe car date', m.earliest ? fmtDate(m.earliest) : 'Not within 3 yrs', `for the ${esc(S.car.label)} at ${fmt(S.car.price)}`, m.earliest ? '' : 'warn', true)}
+    ${card('Max car budget', fmt(m.maxBudget), `GREEN at ${pct(S.budget.downPct, 0)} down, ${pct(S.budget.rate)} for ${S.budget.term} mo`, '', true)}
+  </div>
+  ${al.length ? `<div class="alerts">${al.map(([c, t]) => `<div class="alert ${c}">${t}</div>`).join('')}</div>` : `<div class="alerts"><div class="alert ok">Nothing needs attention. Cash stays above your buffer and free cash flow meets your minimum.</div></div>`}
+  <div class="cols">
+    <section class="panel"><h2>12-month cash balance</h2><p class="sub">Daily projection of total liquid cash. Dashed line is the same plan with the target car bought.</p>
+      ${lineChart(series, { xticks: xt, ref: m.rules.buffer })}</section>
+    <section class="panel"><h2>Cash available for a car</h2><p class="sub">Spendable on the 1st without any later month in the following year falling below your buffer (or the full reserve).</p>
+      <div class="tw"><table><thead><tr><th>Month</th><th class="n">Projected cash</th><th class="n">Above buffer</th><th class="n">Above full reserve</th><th></th></tr></thead><tbody>
+      ${avail.map((x) => `<tr><td>${fmtMonth(x.month)}</td><td class="n">${fmt(x.cash)}</td><td class="n ${x.aboveBuffer > 0 ? 'pos' : 'neg'}">${fmt(x.aboveBuffer)}</td><td class="n ${x.aboveReserve > 0 ? 'pos' : 'neg'}">${fmt(x.aboveReserve)}</td>
+      <td style="width:90px"><div class="bar" style="width:${Math.max(0, (x.aboveBuffer / topA) * 100)}%"></div></td></tr>`).join('')}</tbody></table></div></section>
+  </div>
+  <div class="cols">${vAffordCard()}${vWindows(m.windows.slice(0, 2))}</div>`;
+}
+
+function vAffordCard() {
+  const m = model();
+  const f = afford || { price: 40000, down: 10000, rate: S.budget.rate, term: 60, date: m.carDate, extra: 0 };
+  let res = '';
+  try {
+    const car = carSpec(S, Number(f.price), Number(f.down), Number(f.rate), Number(f.term), { insIncrease: 0, fuel: Number(f.extra) || 0, maint: 0, regRenewal: 0, taxRate: 0, titleReg: 0, dealerFees: 0 });
+    if (!(Number(f.price) >= 0) || Number(f.down) > Number(f.price)) throw new Error('Down payment cannot exceed the price.');
+    const on = f.date && f.date >= TODAY ? f.date : TODAY; const a = E.assess(m.plan, m.rules, car, on);
+    res = `<div style="margin-top:12px"><div class="row" style="margin-bottom:8px">${pill(a.status)}<span class="muted">${a.status === 'GREEN' ? 'Affordable while keeping every target.' : a.status === 'YELLOW' ? 'Affordable, but it compromises savings, liquidity or your buffer.' : 'Not recommended under the current assumptions.'}</span></div>
+    <div class="tw"><table><tbody>
+    <tr><td>Cash required</td><td class="n">${fmt(a.cashNeeded)}</td></tr><tr><td>New monthly payment</td><td class="n">${fmt2(a.payment)}</td></tr>
+    <tr><td>New monthly recurring costs</td><td class="n">${fmt2(a.running)}</td></tr><tr><td>Free cash flow after</td><td class="n ${a.fcfAfter >= m.rules.minFcf ? 'pos' : 'neg'}">${fmt(a.fcfAfter)}/mo</td></tr>
+    <tr><td>Months of essentials left</td><td class="n">${a.emMonths}</td></tr><tr><td>Cash after purchase (lowest in a year)</td><td class="n">${fmt(a.cashAfter)} (${fmt(a.minCash)})</td></tr>
+    <tr><td>Cash 3 / 6 / 12 months later</td><td class="n">${fmt(a.cash3)} / ${fmt(a.cash6)} / ${fmt(a.cash12)}</td></tr></tbody></table></div>
+    ${a.violations.length ? `<ul class="muted" style="margin:8px 0 0;padding-left:18px">${a.violations.map((v) => `<li>${esc(v.msg)}</li>`).join('')}</ul>` : ''}</div>`;
+  } catch (e) { res = `<div class="alert bad" style="margin-top:12px">${esc(e.message)}</div>`; }
+  return `<section class="panel"><h2>Can I afford this?</h2><p class="sub">Any large purchase. The financing amount is price minus down payment.</p>
+    <div class="fgrid" id="affordForm">
+      <label>Purchase price<input type="number" data-af="price" value="${esc(f.price)}"></label><label>Down payment<input type="number" data-af="down" value="${esc(f.down)}"></label>
+      <label>Interest rate (decimal)<input type="number" step="0.001" data-af="rate" value="${esc(f.rate)}"></label><label>Loan term (months)<input type="number" data-af="term" value="${esc(f.term)}"></label>
+      <label>Purchase date<input type="date" data-af="date" value="${esc(f.date)}"></label><label>New monthly costs<input type="number" data-af="extra" value="${esc(f.extra)}"><span class="hint">Insurance, fuel, upkeep</span></label></div>${res}</section>`;
+}
+function vWindows(ws) {
+  return `<section class="panel"><h2>Money already committed</h2><p class="sub">What is spoken for before the next paycheck, so your bank balance does not mislead you.</p>
+  ${ws.map((w) => `<div style="margin-bottom:14px"><h3>${fmtDate(w.pay)} → ${fmtDate(w.next)} ${w.net ? `<span class="badge pl">paycheck ${fmt2(w.net)}</span>` : '<span class="badge">before first paycheck</span>'}</h3>
+    <div class="tw"><table><tbody><tr><td>Cash entering</td><td class="n">${fmt2(w.entering)}</td></tr>
+    ${w.net ? `<tr><td>Paycheck</td><td class="n pos">+${fmt2(w.net)}</td></tr>` : ''}
+    ${w.inflows.map((e) => `<tr><td>${fmtDate(e.on)} ${esc(e.label)}</td><td class="n pos">+${fmt2(e.amount)}</td></tr>`).join('')}
+    ${w.obligations.map((e) => `<tr><td>${fmtDate(e.on)} ${esc(e.label)}</td><td class="n">-${fmt2(e.amount)}</td></tr>`).join('')}
+    <tr class="tot"><td>Available after obligations</td><td class="n">${fmt2(w.endBal)}</td></tr><tr class="hl"><td><strong>Safe discretionary until next paycheck</strong></td><td class="n"><strong>${fmt2(w.safe)}</strong></td></tr></tbody></table></div></div>`).join('')}</section>`;
+}
+
+/* ---------- Cash flow ---------- */
+function groupRows(rows, view) {
+  if (view === 'monthly') return rows.map((r) => ({ ...r, label: fmtMonth(r.month) }));
+  const n = view === 'quarterly' ? 3 : 12; const out = [];
+  for (let i = 0; i < rows.length; i += n) {
+    const g = rows.slice(i, i + n); const cat = {};
+    g.forEach((r) => Object.entries(r.cat).forEach(([k, v]) => { cat[k] = (cat[k] || 0) + v; }));
+    out.push({ month: g[0].month, label: view === 'annual' ? `${fmtMonth(g[0].month)} – ${fmtMonth(g[g.length - 1].month)}` : `Q${Math.floor((Number(g[0].month.slice(5, 7)) - 1) / 3) + 1} ${g[0].month.slice(0, 4)}`,
+      start: g[0].start, cat, income: E.sum(g.map((r) => r.income)), outflow: E.sum(g.map((r) => r.outflow)), net: E.sum(g.map((r) => r.net)), end: g[g.length - 1].end });
+  }
+  return out;
+}
+function colVals(r) {
+  const v = { emp: 0, rent: 0, oth: 0 }; const o = {}; COLS.forEach((c) => { o[c] = 0; });
+  Object.entries(r.cat).forEach(([k, a]) => {
+    if (a > 0) { if (k === 'Employment income') v.emp += a; else if (k === 'Rental income') v.rent += a; else v.oth += a; } else o[colOf(k)] += -a;
+  });
+  // categories that net positive and negative within a bucket are rare; mixed buckets are shown by sign above
+  return { ...v, out: o };
+}
+function csvOf(rows) {
+  const head = ['Month', 'Starting cash', 'Employment income', 'Rental income', 'Other income', 'Total income', ...COLS, 'Total outflows', 'Net cash flow', 'Ending cash'];
+  const lines = [head.join(',')];
+  rows.forEach((r) => { const c = colVals(r); lines.push([r.label, r.start, c.emp, c.rent, c.oth, r.income, ...COLS.map((k) => c.out[k]), r.outflow, r.net, r.end].map((x) => (typeof x === 'number' ? x.toFixed(2) : `"${x}"`)).join(',')); });
+  return lines.join('\n');
+}
+function vCashflow() {
+  const m = model(); const rows = groupRows(m.months12, cfView);
+  const hdr = ['Starting cash', 'Employment', 'Rental', 'Other income', 'Total income', ...COLS, 'Total outflows', 'Net cash flow', 'Ending cash'];
+  const tr = rows.map((r) => { const c = colVals(r); return `<tr><td>${esc(r.label)}</td><td class="n">${fmt(r.start)}</td><td class="n">${fmt(c.emp)}</td><td class="n">${fmt(c.rent)}</td><td class="n">${fmt(c.oth)}</td><td class="n"><strong>${fmt(r.income)}</strong></td>
+    ${COLS.map((k) => `<td class="n">${c.out[k] ? fmt(c.out[k]) : '·'}</td>`).join('')}<td class="n"><strong>${fmt(r.outflow)}</strong></td><td class="n ${r.net >= 0 ? 'pos' : 'neg'}">${fmt(r.net)}</td><td class="n"><strong>${fmt(r.end)}</strong></td></tr>`; }).join('');
+  const labels = m.months12.map((r) => fmtMonth(r.month).split(' ')[0]);
+  const hv = m.months12.map((r) => 0);
+  return `<div><h1>Cash flow</h1><p class="sub">Rolling 12-month forecast. Every figure comes from your paychecks, bills, rent and planned purchases. Savings goals that stay in liquid accounts are transfers and do not leave this cash total.</p></div>
+  <div class="row"><div class="seg" role="group" aria-label="Period">${['monthly', 'quarterly', 'annual'].map((v) => `<button type="button" data-cf="${v}" aria-pressed="${cfView === v}">${v[0].toUpperCase() + v.slice(1)}</button>`).join('')}</div>
+    <span class="badge fc">Forecast</span><button class="btn" type="button" id="csvBtn">Copy as CSV</button></div>
+  <div id="csvOut"></div>
+  <div class="panel tw"><table><thead><tr><th>Period</th>${hdr.map((h) => `<th class="n">${h}</th>`).join('')}</tr></thead><tbody>${tr}</tbody></table></div>
+  <div class="cols"><section class="panel"><h2>Income vs expenses</h2>${barChart(labels, [{ name: 'Income', cls: 's1', vals: m.months12.map((r) => r.income) }, { name: 'Outflows', cls: 's2', vals: m.months12.map((r) => r.outflow) }])}</section>
+  <section class="panel"><h2>Monthly net cash flow</h2><p class="sub">Months with three biweekly paychecks stand out.</p>${barChart(labels, [{ name: 'Net cash flow', cls: 's3', vals: m.months12.map((r) => r.net) }])}</section></div>`;
+}
+
+/* ---------- Paychecks ---------- */
+function vPaychecks() {
+  const m = model(); const st = m.stats;
+  const tl = E.timeline(m.plan, 6);
+  const pays = tl.events.filter((e) => e.category === 'Employment income').slice(0, 8);
+  const ppy = m.plan.paychecks.length ? m.plan.paychecks[0].cadence : 'biweekly'; const perMonth = E.PER_YEAR[ppy] / 12;
+  const catMonthly = {}; m.plan.items.filter((i) => !i.income).forEach((i) => { const c = i.src && i.src.startsWith('sec:expenses') && S.expenses[Number(i.src.split(':')[2])] && /groc/i.test(S.expenses[Number(i.src.split(':')[2])].name) ? 'Groceries' : i.category; catMonthly[c] = (catMonthly[c] || 0) + E.monthlyEq(i); });
+  const g = (n) => (S.goals.find((x) => x.name === n) || { monthly: 0 }).monthly;
+  const sug = {
+    'Mortgage/Housing': ((catMonthly.Mortgage || 0) + (catMonthly.Housing || 0)) / perMonth, 'Utilities': (catMonthly.Utilities || 0) / perMonth, 'Insurance': (catMonthly.Insurance || 0) / perMonth,
+    'Transportation': (catMonthly.Transportation || 0) / perMonth, 'Groceries': ((catMonthly.Groceries || 0) + (catMonthly.Food || 0)) / perMonth,
+    'Discretionary': (['Subscriptions', 'Entertainment', 'Travel', 'Personal', 'Discretionary'].reduce((s, k) => s + (catMonthly[k] || 0), 0)) / perMonth,
+    'Savings': S.goals.filter((x) => x.kind === 'liquid' && !/car|emergency/i.test(x.name)).reduce((s, x) => s + x.monthly, 0) / perMonth,
+    'Investments': (catMonthly.Investments || 0) / perMonth, 'Car Fund': g('Car Fund') / perMonth, 'Emergency Fund': g('Emergency Fund') / perMonth,
+    'Other': ((catMonthly.Debt || 0) + (catMonthly.Healthcare || 0) + (catMonthly.Taxes || 0) + (catMonthly.Other || 0)) / perMonth };
+  const rentShare = m.rentMonthly / perMonth;
+  const cards = pays.map((p) => {
+    const ov = (S.paycheckOverrides || {})[p.on] || {}; const rows = ALLOC.map((k) => { const sv = E.cents(sug[k] || 0); const val = ov[k] != null && ov[k] !== '' ? Number(ov[k]) : sv; return { k, sv, val, over: ov[k] != null && ov[k] !== '' }; });
+    const pool = p.amount + rentShare; const used = E.sum(rows.map((r) => r.val)); const left = pool - used;
+    return `<section class="panel"><h2>${fmtDate(p.on)} <span class="badge fc">Forecast</span></h2><p class="sub">Net paycheck ${fmt2(p.amount)} plus this paycheck's share of tenant rent ${fmt2(rentShare)} (rent covers the housing line).</p>
+    <div class="tw"><table><thead><tr><th>Allocation</th><th class="n">Suggested</th><th class="n">Planned</th></tr></thead><tbody>
+    ${rows.map((r) => `<tr><td>${r.k}</td><td class="n dim">${fmt2(r.sv)}</td><td class="n"><input type="number" step="1" data-ov="${p.on}|${r.k}" value="${r.over ? r.val : ''}" placeholder="${r.sv.toFixed(2)}" style="width:110px;text-align:right"></td></tr>`).join('')}
+    <tr class="tot"><td>Unallocated cash</td><td></td><td class="n ${left < -0.5 ? 'neg' : 'pos'}">${fmt2(left)}</td></tr></tbody></table></div>
+    ${left < -0.5 ? '<div class="alert bad" style="margin-top:8px">Over-allocated: planned amounts exceed this paycheck and its rent share.</div>' : ''}</section>`;
+  });
+  const pc = S.paychecks[0];
+  return `<div><h1>Paycheck planner</h1><p class="sub">Where each paycheck goes. Suggested amounts spread your monthly bills and goals across ${ppy} paychecks. Type in the Planned column to override; clear it to return to the suggestion.</p></div>
+  <div class="cards">${card('Net paycheck', pc ? fmt2(E.payNet({ gross: (pc.gross !== '' && pc.gross != null) ? Number(pc.gross) : E.grossFromSalary(pc.annual, pc.cadence), taxes: pc.taxes, k401: pc.k401, hsa: pc.hsa, ins: pc.ins, other: pc.other })) : '—', pc ? `${esc(pc.employer)} · ${pc.cadence}` : '')}
+  ${card('Paychecks per year', pc ? E.PER_YEAR[pc.cadence] : '—', 'months with an extra paycheck are extra cash')}${card('Monthly net pay', fmt(m.stats.income - m.rentMonthly), 'average, all paychecks')}</div>
+  <div class="cols">${cards.join('')}</div>`;
+}
+
+/* ---------- Calendar ---------- */
+function vCalendar() {
+  const m = model(); const tl = E.timeline(m.plan, 25);
+  const first = calMonth, nDays = new Date(Date.UTC(Number(first.slice(0, 4)), Number(first.slice(5, 7)), 0)).getUTCDate();
+  const dow = new Date(E.pd(first)).getUTCDay(); const cells = [];
+  for (let i = 0; i < dow; i++) cells.push('<div class="d off"></div>');
+  for (let d = 1; d <= nDays; d++) {
+    const day = first.slice(0, 8) + String(d).padStart(2, '0'); const evs = tl.events.filter((e) => e.on === day);
+    const bal = day >= TODAY && day <= tl.end ? E.balanceOn(tl, day) : null;
+    cells.push(`<div class="d"><div class="dn">${d}</div>${evs.map((e, i) => `<button class="ev" type="button" data-src="${esc(e.src || '')}" title="${esc(e.label)} ${fmt2(e.amount)}"><span class="${e.income ? 'pos' : ''}">${e.income ? '+' : '-'}${fmt(e.amount)}</span> ${esc(e.label)}</button>`).join('')}${bal != null && evs.length ? `<div class="bal">bal ${fmt(bal)}</div>` : ''}</div>`);
+  }
+  return `<div><h1>Cash-flow calendar</h1><p class="sub">Every projected transaction with the cash balance after that day. Click one to jump to the assumption behind it.</p></div>
+  <div class="row"><button class="btn" type="button" data-cal="-1">← Prev</button><strong style="min-width:110px;text-align:center">${fmtMonth(first)}</strong><button class="btn" type="button" data-cal="1">Next →</button><span class="badge fc">Forecast</span></div>
+  <div class="panel tw"><div class="cal">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => `<div class="h">${d}</div>`).join('')}${cells.join('')}</div></div>`;
+}
+
+/* ---------- Housing ---------- */
+function vHousing() {
+  const m = model(), mc = m.mc, r = S.rental;
+  const gross = m.housing, net = gross - m.rentMonthly; const trueBenefit = m.rentMonthly - m.rentalCosts;
+  const yrs = {}; mc.sched.forEach((x) => { const y = x.due.slice(0, 4); yrs[y] = yrs[y] || { i: 0, p: 0, end: 0 }; yrs[y].i += x.interest; yrs[y].p += x.principal; yrs[y].end = x.balance; });
+  const labels = m.months12.map((x) => fmtMonth(x.month).split(' ')[0]);
+  return `<div><h1>Housing and rental income</h1><p class="sub">Rental income is kept separate from salary. The tenant's rent reduces your housing cost; the property costs you pay for the rental come out first.</p></div>
+  <div class="cards">${card('Total housing cost', fmt(gross), 'mortgage, escrow and owner-paid costs, per month')}${card('Rental income', fmt(m.rentMonthly), `${fmt(r.rent)} less ${pct(r.vacancy || 0, 0)} vacancy/collection`)}
+  ${card('Net housing cost', fmt(net), 'housing cost minus rent', '', true)}${card('Rental cost to you', fmt(m.rentalCosts), 'repairs, utilities, other')}${card('Rental benefit after costs', fmt(trueBenefit), 'rent less rental-property costs', trueBenefit >= 0 ? 'pos' : 'neg')}
+  ${card('Annual housing cost', fmt(mc.annual + (m.housing - mc.total)), 'incl. rental-property costs')}</div>
+  <div class="cols"><section class="panel"><h2>Mortgage</h2><div class="tw"><table><tbody>
+    <tr><td>Principal & interest</td><td class="n">${fmt2(mc.pi)}</td></tr><tr><td>Extra principal</td><td class="n">${fmt2(S.mortgage.extra || 0)}</td></tr>
+    <tr><td>Property tax + insurance + PMI (escrow)</td><td class="n">${fmt2(mc.escrow)}</td></tr><tr><td>HOA and other</td><td class="n">${fmt2((S.mortgage.hoa || 0) + (S.mortgage.other || 0))}</td></tr>
+    <tr class="tot"><td>Total monthly housing payment</td><td class="n">${fmt2(mc.total)}</td></tr>
+    <tr><td>Next payment: principal / interest</td><td class="n">${fmt2(mc.nextPrincipal)} / ${fmt2(mc.nextInterest)}</td></tr>
+    <tr><td>Current principal</td><td class="n">${fmt2(mc.balance)}</td></tr><tr><td>Payoff</td><td class="n">${mc.sched.length ? fmtDate(mc.sched[mc.sched.length - 1].due) : '—'}</td></tr></tbody></table></div></section>
+  <section class="panel"><h2>Housing cost vs rent</h2>${barChart(labels, [{ name: 'Housing cost', cls: 's2', vals: m.months12.map(() => gross) }, { name: 'Rent received', cls: 's1', vals: m.months12.map(() => m.rentMonthly) }])}</section></div>
+  <section class="panel"><h2>Amortization by year</h2><p class="sub">Computed from the original loan, rate and term; set a current principal under Inputs to re-base it on your servicer's statement.</p>
+  <div class="tw"><table><thead><tr><th>Year</th><th class="n">Interest</th><th class="n">Principal</th><th class="n">Ending balance</th></tr></thead><tbody>${Object.entries(yrs).slice(0, 31).map(([y, v]) => `<tr><td>${y}</td><td class="n">${fmt(v.i)}</td><td class="n">${fmt(v.p)}</td><td class="n">${fmt(v.end)}</td></tr>`).join('')}</tbody></table></div></section>`;
+}
+
+/* ---------- Car & purchases ---------- */
+function vCar() {
+  const m = model(), c = S.car, a = m.assess, d = E.carDerived(c);
+  const offs = [['Buy now', 0], ['Buy in 3 months', 3], ['Buy in 6 months', 6], ['Buy in 12 months', 12]];
+  const scen = offs.map(([n, k]) => { const on = k === 0 ? TODAY : E.addMonths(TODAY, k); return [n, on, E.assess(m.plan, m.rules, c, on)]; });
+  scen.push([`Selected date`, m.carDate < TODAY ? TODAY : m.carDate, a]);
+  const sample = (tl) => { const pts = []; for (let i = 0; i <= 365; i += 5) pts.push([i, E.balanceOn(tl, E.addDays(TODAY, i))]); return pts; };
+  const xt = []; for (let i = 0; i < 12; i += 2) xt.push({ x: E.diffDays(E.addMonths(E.monthStart(TODAY), i), TODAY), label: fmtMonth(E.addMonths(E.monthStart(TODAY), i)).split(' ')[0] });
+  const transport = (d.ownership) / Math.max(m.stats.income - m.rentMonthly, 1);
+  const trans0 = E.sum(m.plan.items.filter((i) => !i.income && i.category === 'Transportation').map(E.monthlyEq));
+  return `<div><h1>Car purchase planner</h1><p class="sub">Full cost of ownership, a safety rating from your own thresholds, and what waiting does.</p></div>
+  <div class="cards">${card('Cash needed at purchase', fmt(d.cash), `down ${fmt(c.down)} + tax ${fmt(d.tax)} + fees ${fmt(d.fees)}`, '', true)}${card('Loan amount', fmt(d.loan), `${pct(c.rate)} for ${c.term} months`)}
+  ${card('Monthly payment', fmt2(d.payment))}${card('Monthly cost of ownership', fmt2(d.ownership), `payment + ${fmt(d.running)} insurance, fuel, upkeep, registration`, '', true)}
+  ${card('Rating on selected date', pill(a.status), fmtDate(m.carDate))}${card('Transportation share', pct((trans0 + d.ownership) / Math.max(m.stats.income - m.rentMonthly, 1), 0), 'of monthly net pay, incl. current vehicle costs')}</div>
+  <div class="cols"><section class="panel"><h2>Safety analysis</h2>${vChecks(a, m)}</section>
+  <section class="panel"><h2>Car impact on cash</h2>${lineChart([{ name: 'Without purchase', cls: 's1', pts: sample(m.tl) }, { name: 'With purchase', cls: 's2', pts: sample(a.tl), dash: true }], { xticks: xt, ref: m.rules.buffer })}</section></div>
+  <section class="panel"><h2>Buy now, or wait?</h2><div class="tw"><table><thead><tr><th>Scenario</th><th>Date</th><th>Rating</th><th class="n">Cash at purchase</th><th class="n">Down</th><th class="n">Loan</th><th class="n">Payment</th><th class="n">Cash after</th><th class="n">Months of essentials</th><th class="n">Free cash flow</th><th class="n">Cash after 12 mo</th></tr></thead><tbody>
+  ${scen.map(([n, on, r]) => `<tr><td>${n}</td><td>${fmtDate(on)}</td><td>${pill(r.status)}</td><td class="n">${fmt(r.cashNeeded)}</td><td class="n">${fmt(c.down)}</td><td class="n">${fmt(r.loan)}</td><td class="n">${fmt2(r.payment)}</td><td class="n">${fmt(r.cashAfter)}</td><td class="n">${r.emMonths}</td><td class="n">${fmt(r.fcfAfter)}</td><td class="n">${fmt(r.cash12)}</td></tr>`).join('')}</tbody></table></div>
+  <p class="sub" style="margin-top:8px">Investing sacrificed in year one if you buy on the selected date: ${fmt(a.opportunity)} (cash at purchase plus 12 months of ownership cost). Earliest GREEN date: <strong>${m.earliest ? fmtDate(m.earliest) : 'not within 3 years'}</strong>. Largest GREEN price: <strong>${fmt(m.maxBudget)}</strong>.</p></section>
+  <section class="panel"><h2>Edit the car</h2>${groupForm('car', CAR_FIELDS)}</section>
+  <section class="panel"><h2>Other planned purchases</h2>${arrayForm('purchases', PUR_COLS, 'Add purchase')}</section>`;
+}
+function vChecks(a, m) {
+  const ok = (b) => (b ? '<span class="pos">Pass</span>' : '<span class="neg">Fail</span>');
+  const incomeNet = Math.max(m.stats.income - m.rentMonthly, 1);
+  return `<div class="row" style="margin-bottom:8px">${pill(a.status)}<span class="muted">${a.violations.length ? a.violations.length + ' rule' + (a.violations.length > 1 ? 's' : '') + ' broken' : 'all rules met'}</span></div>
+  <div class="tw"><table><tbody>
+  <tr><td>${tip('Monthly cash flow', 'Free cash flow after the car, with savings goal transfers already deducted. Must be at least your minimum.')}</td><td class="n">${fmt(a.fcfAfter)}/mo (min ${fmt(m.rules.minFcf)})</td><td>${ok(a.fcfAfter >= m.rules.minFcf)}</td></tr>
+  <tr><td>${tip('Emergency fund', 'Liquid cash after the purchase divided by essential monthly spending, including the car.')}</td><td class="n">${a.emMonths} mo (target ${m.rules.emMonths})</td><td>${ok(a.emMonths >= m.rules.emMonths)}</td></tr>
+  <tr><td>${tip('Cash buffer', 'Lowest projected cash in the 12 months after purchase.')}</td><td class="n">${fmt(a.minCash)} (min ${fmt(m.rules.buffer)})</td><td>${ok(a.minCash >= m.rules.buffer)}</td></tr>
+  <tr><td>Transportation cost vs net income</td><td class="n">${pct(a.ownership / incomeNet, 1)} for the car</td><td></td></tr>
+  <tr><td>Opportunity cost, year one</td><td class="n">${fmt(a.opportunity)}</td><td></td></tr></tbody></table></div>
+  ${a.violations.length ? `<ul class="muted" style="margin:8px 0 0;padding-left:18px">${a.violations.map((v) => `<li>${esc(v.msg)}</li>`).join('')}</ul>` : ''}`;
+}
+
+/* ---------- Scenarios ---------- */
+function scenarioMetrics(sc) {
+  const ex = (x) => (x.cat === 'Entertainment' || x.cat === 'Subscriptions' || x.cat === 'Travel' || x.cat === 'Personal' ? (1 + sc.expensePct / 100) * (1 + sc.discPct / 100) : 1 + sc.expensePct / 100);
+  const plan = derive(S, { salaryFactor: 1 + sc.salaryPct / 100, expenseFactor: ex, rentFactor: sc.loseRent ? 0 : sc.rentPct / 100, extraSave: Number(sc.extraSave) || 0, bonus: Number(sc.bonus) || 0 });
+  const rules = rulesOf(S, sc); const stats = E.planStats(plan); const tl = E.timeline(plan, 12);
+  const on = (S.car.date && S.car.date >= TODAY) ? S.car.date : TODAY;
+  const car = carOf(S); const a = sc.car ? E.assess(plan, rules, car, on) : null;
+  const cashEnd = a ? a.cash12 : E.balanceOn(tl, tl.end);
+  return { income: stats.income, outflows: stats.outflows, fcf: stats.fcf - (a ? a.ownership : 0), cashEnd, minCash: a ? a.minCash : E.minBalance(tl, TODAY, tl.end),
+    em: plan.opening / Math.max(stats.essentials, 1), emTarget: rules.emMonths, maxBudget: E.maxBudget(plan, rules, on, budgetBuilder(S)), earliest: E.earliestSafe(plan, rules, car), status: a ? a.status : null };
+}
+function vScenarios() {
+  const res = S.scenarios.map(scenarioMetrics);
+  const rows = [['Monthly income', (r) => fmt(r.income)], ['Monthly expenses', (r) => fmt(r.outflows)], ['Free cash flow / mo', (r) => `<span class="${r.fcf >= 0 ? 'pos' : 'neg'}">${fmt(r.fcf)}</span>`],
+    ['Cash in 12 months', (r) => fmt(r.cashEnd)], ['Lowest cash, 12 mo', (r) => fmt(r.minCash)], ['Months of essentials now', (r) => `${r.em.toFixed(1)} <span class="dim">/ ${r.emTarget}</span>`],
+    ['Max car budget', (r) => fmt(r.maxBudget)], ['Earliest safe car date', (r) => (r.earliest ? fmtDate(r.earliest) : 'None in 3 yrs')], ['Car rating', (r) => (r.status ? pill(r.status) : '<span class="dim">not bought</span>')]];
+  const ctl = (k, i, t = 'number', w = 70) => `<input type="${t}" data-sc="${i}|${k}" value="${esc(S.scenarios[i][k])}" style="width:${w}px;text-align:right" ${t === 'number' ? 'step="1"' : ''}>`;
+  const chk = (k, i) => `<input type="checkbox" data-sc="${i}|${k}" ${S.scenarios[i][k] ? 'checked' : ''}>`;
+  const pr = [['Salary change %', 'salaryPct'], ['All expenses change %', 'expensePct'], ['Discretionary change %', 'discPct'], ['Rent received %', 'rentPct'], ['Extra investing $/mo', 'extraSave'], ['Emergency months override', 'emMonths'], ['One-time bonus $', 'bonus']];
+  return `<div><h1>Scenarios</h1><p class="sub">Change assumptions on a copy of your plan and compare side by side. Your real inputs are never touched.</p></div>
+  <div class="panel tw"><table><thead><tr><th>Assumption</th>${S.scenarios.map((s, i) => `<th class="n"><input type="text" data-sc="${i}|name" value="${esc(s.name)}" style="width:130px;text-align:right;font-weight:600"></th>`).join('')}</tr></thead><tbody>
+  ${pr.map(([l, k]) => `<tr><td>${l}</td>${S.scenarios.map((s, i) => `<td class="n">${ctl(k, i)}</td>`).join('')}</tr>`).join('')}
+  <tr><td>Lose rental income</td>${S.scenarios.map((s, i) => `<td class="n">${chk('loseRent', i)}</td>`).join('')}</tr>
+  <tr><td>Buy the car</td>${S.scenarios.map((s, i) => `<td class="n">${chk('car', i)}</td>`).join('')}</tr>
+  <tr><td></td>${S.scenarios.map((s, i) => `<td class="n"><button class="mini" type="button" data-dup="${i}">Duplicate</button>${i ? `<button class="mini" type="button" data-delsc="${i}">Remove</button>` : ''}</td>`).join('')}</tr>
+  <tr class="tot"><td colspan="${S.scenarios.length + 1}">Results</td></tr>
+  ${rows.map(([l, f]) => `<tr><td>${l}</td>${res.map((r) => `<td class="n">${f(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+
+/* ---------- Plan vs actual ---------- */
+function plannedByCol() {
+  const m = model(); const out = {}; COLS.forEach((c) => { out[c] = 0; }); out.Income = 0;
+  m.plan.items.forEach((i) => { if (i.income) out.Income += E.monthlyEq(i); else out[colOf(i.category)] += E.monthlyEq(i); });
+  m.plan.paychecks.forEach((p) => { out.Income += (E.payNet(p) * E.PER_YEAR[p.cadence]) / 12; });
+  Object.keys(out).forEach((k) => { out[k] = E.cents(out[k]); }); return out;
+}
+function vActual() {
+  const plan = plannedByCol(); const act = S.actuals[actMonth] || {};
+  const lines = ['Income', ...COLS.filter((c) => plan[c] > 0 || act[c] > 0)];
+  const rows = lines.map((c) => { const p = plan[c] || 0; const a = act[c] === '' || act[c] == null ? null : Number(act[c]); const v = a == null ? null : a - p; const fav = v == null ? null : c === 'Income' ? v >= 0 : v <= 0;
+    return { c, p, a, v, pct: v == null || p === 0 ? null : v / p, fav }; });
+  const months = []; for (let i = -3; i <= 0; i++) months.push(E.addMonths(E.monthStart(TODAY), i).slice(0, 7));
+  const spendRows = rows.filter((r) => r.c !== 'Income' && r.a != null);
+  return `<div><h1>Plan vs actual</h1><p class="sub">Plan is your monthly budget from the assumptions (bills averaged to a month). Enter what actually happened; variance and favorable/unfavorable are calculated.</p></div>
+  <div class="row"><label class="muted">Month <select id="actMonth">${months.map((k) => `<option value="${k}" ${k === actMonth ? 'selected' : ''}>${fmtMonth(k + '-01')}</option>`).join('')}</select></label><span class="badge ac">Actual</span><span class="badge pl">Plan</span></div>
+  <div class="panel tw"><table><thead><tr><th>Line</th><th class="n">Plan</th><th class="n">Actual</th><th class="n">Variance $</th><th class="n">Variance %</th><th>Result</th></tr></thead><tbody>
+  ${rows.map((r) => `<tr><td>${r.c}</td><td class="n">${fmt(r.p)}</td><td class="n"><input type="number" data-act="${r.c}" value="${r.a == null ? '' : r.a}" style="width:110px;text-align:right"></td>
+  <td class="n">${r.v == null ? '·' : fmt(r.v)}</td><td class="n">${r.pct == null ? '·' : pct(r.pct)}</td><td>${r.fav == null ? '' : r.fav ? '<span class="pos">Favorable</span>' : '<span class="neg">Unfavorable</span>'}</td></tr>`).join('')}</tbody></table></div>
+  ${spendRows.length ? `<section class="panel"><h2>Actual vs planned spending</h2>${barChart(spendRows.map((r) => r.c.slice(0, 8)), [{ name: 'Plan', cls: 's2', vals: spendRows.map((r) => r.p) }, { name: 'Actual', cls: 's1', vals: spendRows.map((r) => r.a) }])}</section>` : ''}`;
+}
+
+/* ---------- Net worth ---------- */
+function vNetWorth() {
+  const m = model(), c = S.cash, mc = m.mc;
+  const debts = E.sum(S.debts.map((d) => d.balance || 0));
+  const assets = [['Checking', c.checking], ['Savings', c.savings], ['Investments', c.investments], ['Retirement', c.retirement], ['Home (market value)', c.home], ['Other assets', c.other]];
+  const liab = [['Mortgage', mc.balance], ...S.debts.map((d) => [`${d.type}: ${d.name}`, d.balance])];
+  const A = E.sum(assets.map((x) => x[1] || 0)), L = E.sum(liab.map((x) => x[1] || 0)); const nw = A - L;
+  const invAdd = (i) => E.sum(m.months12.slice(0, i + 1).map((r) => -(r.cat.Investments || 0)));
+  const pts = m.months12.map((r, i) => { const sched = mc.sched[Math.min(i, mc.sched.length - 1)]; const bal = sched ? sched.balance : 0;
+    const dbt = Math.max(0, debts - E.sum(S.debts.map((d) => (d.payment || 0))) * (i + 1) * 0.9);
+    return [i, r.end + (c.investments || 0) + invAdd(i) + (c.retirement || 0) + (c.home || 0) + (c.other || 0) - bal - dbt]; });
+  const xt = m.months12.map((r, i) => ({ x: i, label: fmtMonth(r.month).split(' ')[0] })).filter((_, i) => i % 2 === 0);
+  return `<div><h1>Net worth</h1><p class="sub">Secondary to cash flow. Home value is your estimate, so treat equity as approximate.</p></div>
+  <div class="cards">${card('Net worth', fmt(nw), '', '', true)}${card('Assets', fmt(A))}${card('Liabilities', fmt(L))}${card('Home equity', fmt((c.home || 0) - mc.balance), 'value less mortgage principal')}${card('Liquid net worth', fmt(m.plan.opening - debts), 'cash less non-mortgage debt')}</div>
+  <div class="cols"><section class="panel"><h2>Assets</h2><div class="tw"><table><tbody>${assets.map(([n, v]) => `<tr><td>${n}</td><td class="n">${fmt(v)}</td></tr>`).join('')}<tr class="tot"><td>Total assets</td><td class="n">${fmt(A)}</td></tr></tbody></table></div></section>
+  <section class="panel"><h2>Liabilities</h2><div class="tw"><table><tbody>${liab.map(([n, v]) => `<tr><td>${esc(n)}</td><td class="n">${fmt(v)}</td></tr>`).join('')}<tr class="tot"><td>Total liabilities</td><td class="n">${fmt(L)}</td></tr></tbody></table></div></section></div>
+  <section class="panel"><h2>Projected net worth, 12 months</h2><p class="sub">Cash from the forecast, investments plus planned contributions, mortgage principal paid down. Market growth and home appreciation are not assumed.</p>${lineChart([{ name: 'Net worth', cls: 's3', pts }], { xticks: xt })}</section>`;
+}
+
+/* ---------- Input editors ---------- */
+const getP = (o, p) => p.split('.').reduce((x, k) => (x == null ? x : x[k]), o);
+const setP = (o, p, v) => { const ks = p.split('.'); const last = ks.pop(); ks.reduce((x, k) => x[k], o)[last] = v; };
+function inp(path, f, val, attrs = '') {
+  const t = f.t || 'num', id = f.id ? `id="${f.id}"` : '';
+  if (t === 'sel') return `<select ${attrs} data-t="sel">${f.opts.map((o) => `<option ${o === val ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>`;
+  if (t === 'bool') return `<input type="checkbox" data-t="bool" ${val ? 'checked' : ''} ${attrs}>`;
+  if (t === 'date') return `<input type="date" data-t="date" value="${esc(val)}" ${attrs}>`;
+  if (t === 'text') return `<input type="text" data-t="text" value="${esc(val)}" ${attrs}>`;
+  if (t === 'pct') return `<input type="number" step="0.01" data-t="pct" value="${val === '' || val == null ? '' : +(val * 100).toFixed(4)}" ${attrs}>`;
+  return `<input type="number" step="${f.step || 'any'}" data-t="num" value="${val == null ? '' : esc(val)}" ${attrs}>`;
+}
+function groupForm(name, fields) {
+  return `<div class="fgrid">${fields.map((f) => `<label>${f.l}${inp(f.k, f, getP(S[name], f.k), `data-p="${name}.${f.k}"`)}${f.h ? `<span class="hint">${f.h}</span>` : ''}</label>`).join('')}</div>`;
+}
+function arrayForm(name, cols, addLabel) {
+  const rows = S[name].map((row, i) => `<tr id="row-${name}-${i}">${cols.map((c) => `<td>${c.calc ? c.calc(row) : inp(c.k, c, row[c.k], `data-a="${name}" data-i="${i}" data-k="${c.k}"`)}</td>`).join('')}<td><button class="mini" type="button" data-del="${name}|${i}" aria-label="Remove row">✕</button></td></tr>`).join('');
+  return `<div class="tw"><table><thead><tr>${cols.map((c) => `<th>${c.l}</th>`).join('')}<th></th></tr></thead><tbody>${rows}</tbody></table></div><div style="margin-top:8px"><button class="btn" type="button" data-add="${name}">+ ${addLabel}</button></div>`;
+}
+const CASH_FIELDS = [{ k: 'checking', l: 'Checking balance' }, { k: 'savings', l: 'Savings balance', h: 'Includes emergency and car funds; they are liquid.' }, { k: 'investments', l: 'Investment accounts' }, { k: 'retirement', l: 'Retirement accounts' }, { k: 'home', l: 'Home market value' }, { k: 'other', l: 'Other assets' }];
+const MORT_FIELDS = [{ k: 'original', l: 'Original loan amount' }, { k: 'rate', l: 'Interest rate (%)', t: 'pct' }, { k: 'term', l: 'Term (months)' }, { k: 'first', l: 'First payment date', t: 'date' },
+  { k: 'pi', l: 'P&I payment (optional)', h: 'Blank = calculated from the loan terms. Use your servicer’s figure if it differs.' }, { k: 'currentPrincipal', l: 'Current principal (optional)', h: 'Blank = from the amortization schedule.' },
+  { k: 'tax', l: 'Property tax / month' }, { k: 'ins', l: 'Homeowners insurance / month' }, { k: 'pmi', l: 'PMI or MIP / month' }, { k: 'hoa', l: 'HOA / month' }, { k: 'other', l: 'Other property costs / month' }, { k: 'extra', l: 'Extra principal / month' }, { k: 'dueDay', l: 'Due day of month' }];
+const RENT_FIELDS = [{ k: 'label', l: 'Tenant label', t: 'text' }, { k: 'rent', l: 'Monthly rent' }, { k: 'dueDay', l: 'Rent arrives on day' }, { k: 'leaseStart', l: 'Lease start', t: 'date' }, { k: 'leaseEnd', l: 'Lease end', t: 'date', h: 'Rent stops after this date in the forecast. Move it out if you expect to renew.' },
+  { k: 'growth', l: 'Expected rent increase / year (%)', t: 'pct' }, { k: 'vacancy', l: 'Vacancy / collection loss (%)', t: 'pct', h: 'Applied to rent so income is conservative.' }, { k: 'repairs', l: 'Repairs and maintenance / month' }, { k: 'utilities', l: 'Utilities I pay for the tenant / month' }, { k: 'other', l: 'Other rental costs / month' }];
+const PAY_COLS = [{ k: 'employer', l: 'Employer', t: 'text' }, { k: 'cadence', l: 'Frequency', t: 'sel', opts: E.PAY }, { k: 'first', l: 'Next pay date', t: 'date' }, { k: 'annual', l: 'Annual salary' }, { k: 'gross', l: 'Gross / paycheck', h: '' },
+  { k: 'taxes', l: 'Taxes' }, { k: 'k401', l: '401(k)' }, { k: 'hsa', l: 'HSA' }, { k: 'ins', l: 'Insurance' }, { k: 'other', l: 'Other deductions' },
+  { l: 'Net paycheck', calc: (r) => `<strong class="mono">${fmt2(E.payNet({ gross: r.gross !== '' && r.gross != null ? Number(r.gross) : E.grossFromSalary(r.annual || 0, r.cadence), taxes: r.taxes, k401: r.k401, hsa: r.hsa, ins: r.ins, other: r.other }))}</strong>` }];
+const EXP_COLS = [{ k: 'name', l: 'Expense', t: 'text' }, { k: 'cat', l: 'Category', t: 'sel', opts: EXP_CATS }, { k: 'amount', l: 'Amount' }, { k: 'freq', l: 'Frequency', t: 'sel', opts: FREQS }, { k: 'due', l: 'Next due', t: 'date' }, { k: 'end', l: 'End date', t: 'date' },
+  { k: 'fixed', l: 'Fixed', t: 'bool' }, { k: 'essential', l: 'Essential', t: 'bool' }, { k: 'acct', l: 'Paid from', t: 'sel', opts: ['Checking', 'Savings', 'Credit card'] }, { k: 'growth', l: 'Inflation %', t: 'pct' },
+  { l: 'Monthly', calc: (r) => `<span class="mono">${fmt(E.monthlyEq({ amount: r.amount || 0, cadence: r.freq }))}</span>` }];
+const GOAL_COLS = [{ k: 'name', l: 'Goal', t: 'text' }, { k: 'kind', l: 'Type', t: 'sel', opts: ['liquid', 'invest'] }, { k: 'target', l: 'Target' }, { k: 'current', l: 'Current balance' }, { k: 'monthly', l: 'Monthly contribution' }, { k: 'date', l: 'Target date', t: 'date' }, { k: 'priority', l: 'Priority' }, { k: 'min', l: 'Minimum balance' },
+  { l: 'Progress / projected completion', calc: (g) => { const left = g.target - g.current; const mo = g.monthly > 0 ? Math.ceil(left / g.monthly) : null; return `<span class="mono">${pct(Math.min(1, g.current / (g.target || 1)), 0)} · ${left <= 0 ? 'done' : mo == null ? 'no contribution' : fmtMonth(E.addMonths(TODAY, mo))}</span>`; } }];
+const DEBT_COLS = [{ k: 'name', l: 'Debt', t: 'text' }, { k: 'type', l: 'Type', t: 'sel', opts: ['Credit card', 'Auto loan', 'Student loan', 'Other'] }, { k: 'balance', l: 'Balance' }, { k: 'rate', l: 'Rate %', t: 'pct' }, { k: 'payment', l: 'Monthly payment' }];
+const PUR_COLS = [{ k: 'name', l: 'Purchase', t: 'text' }, { k: 'date', l: 'Date', t: 'date' }, { k: 'amount', l: 'Amount' }];
+const RULE_FIELDS = [{ k: 'emMonths', l: 'Minimum emergency fund (months of essentials)', h: '3, 6 or custom.' }, { k: 'buffer', l: 'Minimum checking buffer ($)' }, { k: 'minFcf', l: 'Minimum monthly free cash flow ($)' }, { k: 'redFrac', l: 'RED below this share of emergency target', h: '0.5 = RED under half the target.' }];
+const CAR_FIELDS = [{ k: 'label', l: 'Vehicle', t: 'text' }, { k: 'price', l: 'Purchase price' }, { k: 'down', l: 'Down payment' }, { k: 'tradeIn', l: 'Trade-in value' }, { k: 'taxRate', l: 'Sales tax (%)', t: 'pct' }, { k: 'titleReg', l: 'Registration / title' }, { k: 'dealerFees', l: 'Dealer fees' },
+  { k: 'financeFees', l: 'Finance taxes and fees', t: 'bool' }, { k: 'rate', l: 'Loan interest rate (%)', t: 'pct' }, { k: 'term', l: 'Loan term (months)' }, { k: 'insIncrease', l: 'Insurance increase / month', h: 'Extra over your current policy.' }, { k: 'fuel', l: 'Extra fuel / month', h: 'Difference from your current car.' },
+  { k: 'maint', l: 'Extra maintenance / month' }, { k: 'regRenewal', l: 'Annual registration renewal' }, { k: 'date', l: 'Planned purchase date', t: 'date' }];
+const BUD_FIELDS = [{ k: 'downPct', l: 'Max-budget: down payment (%)', t: 'pct' }, { k: 'rate', l: 'Max-budget: loan rate (%)', t: 'pct' }, { k: 'term', l: 'Max-budget: loan term (months)' }];
+
+const SECTIONS = [
+  ['cash', 'Current cash balances', 'Start with what is in your accounts today.', () => groupForm('cash', CASH_FIELDS)],
+  ['paychecks', 'Employment income and paychecks', 'Enter salary or gross per paycheck, then each deduction. Pay dates are generated from the next pay date and frequency.', () => arrayForm('paychecks', PAY_COLS, 'Add employer')],
+  ['mortgage', 'Duplex mortgage', 'Payment, escrow and recurring property costs. Principal and interest are split automatically.', () => groupForm('mortgage', MORT_FIELDS)],
+  ['rental', 'Tenant rent and rental property', 'Rent is modeled conservatively with a vacancy or collection assumption.', () => groupForm('rental', RENT_FIELDS)],
+  ['expenses', 'Recurring expenses', 'Each one converts to a monthly equivalent automatically. Mark what is essential: it sets your emergency-fund requirement.', () => arrayForm('expenses', EXP_COLS, 'Add expense')],
+  ['goals', 'Savings and investment goals', 'Liquid goals stay in your cash (they are earmarked, not spent). Investment goals leave your cash.', () => arrayForm('goals', GOAL_COLS, 'Add goal')],
+  ['debts', 'Existing debts', 'Monthly payments reduce free cash flow.', () => arrayForm('debts', DEBT_COLS, 'Add debt')],
+  ['rules', 'Safety rules and emergency fund target', 'These thresholds decide GREEN, YELLOW and RED for any purchase.', () => groupForm('rules', RULE_FIELDS)],
+  ['purchases', 'Planned large purchases', 'One-time costs that come out of cash on a date.', () => arrayForm('purchases', PUR_COLS, 'Add purchase')],
+  ['car', 'Car purchase target', 'The vehicle you are planning for, plus how the maximum budget is solved.', () => groupForm('car', CAR_FIELDS) + '<h3 style="margin:16px 0 8px">Maximum-budget assumptions</h3>' + groupForm('budget', BUD_FIELDS)],
+];
+const NEW_ROW = {
+  paychecks: () => ({ employer: '', cadence: 'biweekly', first: nextDow(E.addDays(TODAY, 1), 5), annual: 0, gross: '', taxes: 0, k401: 0, hsa: 0, ins: 0, other: 0 }),
+  expenses: () => ({ name: '', cat: 'Other', amount: 0, freq: 'monthly', due: nextDom(TODAY, 1), end: '', fixed: true, essential: false, acct: 'Checking', growth: 0 }),
+  goals: () => ({ name: '', kind: 'liquid', target: 0, current: 0, monthly: 0, date: E.addMonths(TODAY, 12), priority: 3, min: 0 }),
+  debts: () => ({ name: '', type: 'Credit card', balance: 0, rate: 0, payment: 0 }),
+  purchases: () => ({ name: '', date: E.addMonths(TODAY, 3), amount: 0 }),
+};
+function liveStrip() {
+  const m = model();
+  return `<div class="cards" id="strip">${card('Free cash flow', fmt(m.stats.fcf), '/month', m.stats.fcf >= m.rules.minFcf ? 'pos' : 'warn')}${card('Monthly income', fmt(m.stats.income))}${card('Emergency fund', m.emMonthsNow >= 99 ? '—' : m.emMonthsNow.toFixed(1) + ' mo')}${card('Max car budget', fmt(m.maxBudget))}</div>`;
+}
+function vInputs() {
+  return `<div><h1>Inputs</h1><p class="sub">Every number in the dashboard traces back to something on this page. Changes save in this browser as you go.</p></div>${liveStrip()}
+  ${SECTIONS.map(([k, t, d, f]) => `<section class="panel" id="sec-${k}"><h2>${t}</h2><p class="sub">${d}</p>${f()}</section>`).join('')}
+  <section class="panel"><h2>Save, load and reset</h2><p class="sub">Downloads are not available in this viewer, so copy the text to keep a backup, or paste it back to restore.</p>
+  <div class="row"><button class="btn" type="button" id="expBtn">Show my data</button><button class="btn" type="button" id="impBtn">Load pasted data</button><button class="btn danger" type="button" id="resetBtn">Reset to example numbers</button></div>
+  <textarea id="dataBox" placeholder="Your plan as JSON appears here. Paste JSON and press Load to restore." style="margin-top:10px" spellcheck="false"></textarea><div id="dataMsg" class="sub"></div></section>`;
+}
+function vSetup() {
+  const [k, t, d, f] = SECTIONS[wizStep];
+  return `<div><h1>Setup</h1><p class="sub">Ten steps, one screen each. Defaults are example numbers; replace them with yours.</p></div>
+  <div class="steps">${SECTIONS.map((s, i) => `<span class="${i === wizStep ? 'on' : i < wizStep ? 'done' : ''}">${i + 1}. ${s[1].split(' ').slice(0, 2).join(' ')}</span>`).join('')}</div>
+  <section class="panel" id="sec-${k}"><h2>Step ${wizStep + 1} of ${SECTIONS.length}: ${t}</h2><p class="sub">${d}</p>${f()}</section>${liveStrip()}
+  <div class="row"><button class="btn" type="button" data-wiz="-1" ${wizStep === 0 ? 'disabled' : ''}>Back</button>
+  ${wizStep < SECTIONS.length - 1 ? '<button class="btn primary" type="button" data-wiz="1">Next</button>' : '<button class="btn primary" type="button" id="finishBtn">Finish and see my forecast</button>'}</div>`;
+}
+
+/* ---------- events ---------- */
+function parseVal(el) {
+  const t = el.dataset.t;
+  if (t === 'bool') return el.checked;
+  if (t === 'num') return el.value === '' ? (el.closest('td, label') && /optional/.test(el.closest('label') ? el.closest('label').textContent : '') ? '' : 0) : Number(el.value);
+  if (t === 'pct') return el.value === '' ? 0 : Number(el.value) / 100;
+  return el.value;
+}
+function touch() { S.example = false; save(); invalidate(); }
+function refreshStrip() { const s = document.getElementById('strip'); if (s) s.outerHTML = liveStrip(); }
+document.addEventListener('change', (ev) => {
+  const el = ev.target;
+  if (el.dataset.p) {
+    let v = parseVal(el); const path = el.dataset.p;
+    if (['mortgage.pi', 'mortgage.currentPrincipal', 'paychecks.gross'].includes(path) && el.value === '') v = '';
+    setP(S, path, v); touch(); refreshStrip();
+  } else if (el.dataset.a) {
+    const row = S[el.dataset.a][Number(el.dataset.i)]; let v = parseVal(el);
+    if (el.dataset.k === 'gross' && el.value === '') v = '';
+    if (el.dataset.k === 'end' && el.value === '') v = '';
+    row[el.dataset.k] = v; touch(); refreshStrip();
+    if (el.dataset.k === 'cadence' || el.dataset.k === 'freq' || ['annual', 'gross', 'taxes', 'k401', 'hsa', 'ins', 'other', 'amount', 'target', 'current', 'monthly'].includes(el.dataset.k)) { const keep = document.activeElement; rerenderPreserving(el); }
+  } else if (el.dataset.af) {
+    afford = afford || { price: 40000, down: 10000, rate: S.budget.rate, term: 60, date: model().carDate, extra: 0 };
+    afford[el.dataset.af] = el.dataset.af === 'date' ? el.value : el.value; render();
+  } else if (el.dataset.sc) {
+    const [i, k] = el.dataset.sc.split('|'); const sc = S.scenarios[Number(i)];
+    sc[k] = el.type === 'checkbox' ? el.checked : el.type === 'number' ? (el.value === '' ? (k === 'emMonths' ? '' : 0) : Number(el.value)) : el.value; save(); render();
+  } else if (el.dataset.ov) {
+    const [d, k] = el.dataset.ov.split('|'); S.paycheckOverrides = S.paycheckOverrides || {}; S.paycheckOverrides[d] = S.paycheckOverrides[d] || {};
+    S.paycheckOverrides[d][k] = el.value === '' ? '' : Number(el.value); save(); render();
+  } else if (el.dataset.act) {
+    S.actuals[actMonth] = S.actuals[actMonth] || {}; S.actuals[actMonth][el.dataset.act] = el.value === '' ? '' : Number(el.value); save(); render();
+  } else if (el.id === 'actMonth') { actMonth = el.value; render(); }
+});
+function rerenderPreserving(el) { /* net paycheck / monthly columns are calculated; refresh the open section without losing the view */
+  const y = window.scrollY; const sec = el.closest('section'); if (!sec) return; const id = sec.id.replace('sec-', ''); const s = SECTIONS.find((x) => x[0] === id);
+  if (!s) return; const h = sec.querySelector('h2').outerHTML; const sub = sec.querySelector('.sub').outerHTML;
+  const ae = document.activeElement; const key = ae && ae.dataset ? { a: ae.dataset.a, i: ae.dataset.i, k: ae.dataset.k, p: ae.dataset.p } : null;
+  sec.innerHTML = h + sub + s[3]();
+  if (key && key.a) { const n = sec.querySelector(`[data-a="${key.a}"][data-i="${key.i}"][data-k="${key.k}"]`); if (n) { /* leave focus to the next field */ } }
+  window.scrollTo(0, y);
+}
+document.addEventListener('click', (ev) => {
+  const t = ev.target.closest('button, a'); if (!t) return;
+  if (t.dataset.tab) { tab = t.dataset.tab; try { history.replaceState(null, '', '#' + tab); } catch (e) { /* ignore */ } render(); return; }
+  if (t.dataset.go) { ev.preventDefault(); tab = t.dataset.go; render(); return; }
+  if (t.dataset.cf) { cfView = t.dataset.cf; render(); return; }
+  if (t.dataset.cal) { calMonth = E.addMonths(calMonth, Number(t.dataset.cal)); render(); return; }
+  if (t.dataset.wiz) { wizStep = Math.max(0, Math.min(SECTIONS.length - 1, wizStep + Number(t.dataset.wiz))); render(); return; }
+  if (t.id === 'finishBtn') { S.setupDone = true; S.example = false; save(); invalidate(); tab = 'overview'; render(); return; }
+  if (t.dataset.add) { S[t.dataset.add].push(NEW_ROW[t.dataset.add]()); touch(); focusAfter = `row-${t.dataset.add}-${S[t.dataset.add].length - 1}`; render(); return; }
+  if (t.dataset.del) { const [n, i] = t.dataset.del.split('|'); S[n].splice(Number(i), 1); touch(); render(); return; }
+  if (t.dataset.dup) { const sc = JSON.parse(JSON.stringify(S.scenarios[Number(t.dataset.dup)])); sc.name += ' copy'; S.scenarios.push(sc); save(); render(); return; }
+  if (t.dataset.delsc) { S.scenarios.splice(Number(t.dataset.delsc), 1); save(); render(); return; }
+  if (t.dataset.src !== undefined && t.classList.contains('ev')) {
+    const s = t.dataset.src; if (s.startsWith('sec:')) { const [, sec, idx] = s.split(':'); tab = 'inputs'; focusAfter = sec === 'expenses' || sec === 'goals' || sec === 'debts' || sec === 'purchases' ? `row-${sec}-${idx}` : `sec-${sec}`; render(); }
+    else if (s.startsWith('pay:')) { tab = 'inputs'; focusAfter = 'sec-paychecks'; render(); } else if (s === 'car') { tab = 'car'; render(); } return;
+  }
+  if (t.id === 'csvBtn') {
+    const csv = csvOf(groupRows(model().months12, cfView)); const out = document.getElementById('csvOut');
+    out.innerHTML = '<textarea id="csvBox" readonly></textarea>'; const box = document.getElementById('csvBox'); box.value = csv; box.select();
+    try { navigator.clipboard.writeText(csv).then(() => { out.insertAdjacentHTML('beforeend', '<div class="sub">Copied to clipboard.</div>'); }, () => { out.insertAdjacentHTML('beforeend', '<div class="sub">Select the text above and copy it.</div>'); }); } catch (e) { out.insertAdjacentHTML('beforeend', '<div class="sub">Select the text above and copy it.</div>'); }
+    return;
+  }
+  if (t.id === 'expBtn') { const b = document.getElementById('dataBox'); b.value = JSON.stringify(S, null, 2); b.select(); document.getElementById('dataMsg').textContent = 'Copy this text to keep a backup.'; return; }
+  if (t.id === 'impBtn') {
+    try { const o = JSON.parse(document.getElementById('dataBox').value); if (!o || o.v !== 1 || !o.cash || !o.paychecks) throw new Error('That text is not a plan exported from this page.'); S = o; save(); invalidate(); document.getElementById('dataMsg').textContent = 'Loaded.'; render(); }
+    catch (e) { document.getElementById('dataMsg').innerHTML = `<span class="neg">${esc(e.message)}</span>`; } return;
+  }
+  if (t.id === 'resetBtn') {
+    if (t.dataset.arm) { S = seed(); save(); invalidate(); render(); return; }
+    t.dataset.arm = '1'; t.textContent = 'Press again to replace everything with examples'; return;
+  }
+  if (t.id === 'themeBtn') {
+    const r = document.documentElement; const dark = r.dataset.theme === 'dark' || (!r.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+    r.dataset.theme = dark ? 'light' : 'dark'; render();
+  }
+});
+document.addEventListener('input', (ev) => { /* what-if fields recompute as you type */
+  const el = ev.target; if (el.dataset.af) { /* wait for change to avoid losing focus */ }
+});
+window.addEventListener('hashchange', () => { const h = location.hash.replace('#', ''); if (TABS.some((x) => x[0] === h) && h !== tab) { tab = h; render(); } });
+
+render();
+</script>
